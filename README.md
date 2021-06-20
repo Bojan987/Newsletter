@@ -6,19 +6,10 @@ Belgrade Time is NewsLetter platform made with the intention to provide up to da
 Live version is yet to be deployed. Project is still in development .
 
 Frontend code is [here](https://github.com/Bojan987/Newsletter/tree/main/novinski-portal)
+
 Backend code is [here](https://github.com/Bojan987/Newsletter/tree/main/novinski-portal-api)
 
-- [Admin panel]
-  1.)
-- [Public page]
-  1.) Home Page
-  2.) Category Page
-  3.) Search Page
-  4.) Journalist Profile
-  
-- [Installation](#installation)
-- [Credits](#credits)
-- [Contributors](#contributors)
+
 ## Table of Contents
 
 - [Features](#features)
