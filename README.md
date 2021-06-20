@@ -15,8 +15,7 @@ Backend code is [here](https://github.com/Bojan987/Newsletter/tree/main/novinski
 - [Features](#features)
 - [Technologies](#technologies)
 - [Installation](#installation)
-- [Credits](#credits)
-- [Contributors](#contributors)
+
 
 ## Features
 
