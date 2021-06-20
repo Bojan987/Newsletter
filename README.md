@@ -1,4 +1,4 @@
-# Belgrade Times
+# Belgrade Times - still in development
 
 
 Belgrade Time is NewsLetter platform made with the intention to provide up to date news and help journalist to easily maintain and writte their articles.
