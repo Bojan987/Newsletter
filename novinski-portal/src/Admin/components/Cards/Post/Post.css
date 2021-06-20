@@ -1,0 +1,52 @@
+.post-title{
+    width: 40%;
+    overflow-y: hidden;
+    height: 70px;
+}
+.post-category{
+    width: 15%;
+    padding: 0 10px;
+}
+.post-author{
+    width: 15%;
+    padding: 0 10px;
+}
+.post-published{
+    width: 15%;
+}
+.post-views{
+    width: 10%;
+    text-align: center;
+}
+.post-comments{
+    width: 10%;
+    text-align: center;
+}
+.link{
+    text-decoration: none;
+    color: inherit;
+}
+.comm-views-label{
+    display: none;
+}
+
+@media (max-width: 800px){
+    .post-title, .post-category, .post-author, .post-published, .post-views, .post-comments{
+        width: 100%;
+    }
+    .post-category{
+        padding: 0;
+    }
+    .post-author{
+        padding: 0;
+    }
+    .post-views{
+        text-align: left;
+    }.post-comments{
+        text-align: left;
+    }
+    .comm-views-label{
+        display: inline-block;
+        padding: 0 0 0 5px;
+    }
+}

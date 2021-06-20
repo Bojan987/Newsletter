@@ -1,0 +1,22 @@
+{
+    "id": "1",
+    "firstName": "Pera",
+    "lastName": "Peric",
+    "email": "perin@email.com",
+    "phone": "063123456",
+    "city": "NeverLand",
+    "country": "Serbia",
+    "address": "Bulevar Aleksandra 31",
+    "role": "admin",
+    "position": "manager",
+    "lastLogin": "Bulevar Aleksandra 31",
+    "lastLoginTime": "5/27/2021, 10:50:49 AM",
+    "lastIp": "78.121.13.49",
+    "status": "Active",
+    "emailConfirm": "Confirmed",
+    "socialAccounts": [
+        { "network": "Facebook", "link": "www.negde.com" },
+        { "network": "Twitter", "link": "www.negde.com" }
+     
+    ]
+}

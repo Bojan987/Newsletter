@@ -1,0 +1,94 @@
+.title-field {
+    width: 100%;
+}
+.comment-field,
+.category-field,
+.tags-field,
+.author-field,
+.content-field {
+    color: #909090;
+}
+.comment-field,
+.category-field {
+    padding: 0 0 0 15px;
+}
+.content-field p {
+    font-size: 17px;
+    padding: 15px;
+}
+form {
+    width: 100%;
+}
+
+.left-first-row {
+    display: flex;
+    justify-content: space-between;
+}
+.label {
+    font-family: 'Bitter', serif;
+    font-weight: bold;
+}
+.right-first-div {
+    border-bottom: 2px solid #f2f2f2;
+    padding: 20px 0 0 20px;
+    font-family: 'Bitter', serif;
+    font-weight: bold;
+}
+.display-flex {
+    display: flex;
+}
+.right-second-div {
+    padding: 20px 0 20px 20px;
+}
+.right-third-div {
+    padding: 20px 0 20px 20px;
+}
+.right-buttons {
+    padding: 40px 0 0 0;
+    text-align: center;
+}
+.right-button-left {
+    margin: 0 10px;
+}
+.author-info {
+    padding: 0 16px;
+}
+.author-info h3 {
+    margin: 0;
+}
+.author-role {
+    color: #929292;
+    text-decoration: underline;
+}
+.admin-single-post-content {
+    padding: 30px 250px 30px 0;
+    color: #929292;
+}
+.admin-single-post-title {
+    padding: 40px 50px 0 0;
+    color: #231f20;
+    font-family: 'Bitter', serif;
+    font-size: 30px;
+    font-weight: bold;
+}
+@media (max-width: 750px) {
+    .edit-post-content,
+    .create-post-content,
+    .admin-single-post {
+        flex-direction: column;
+    }
+    .admin-single-post-content {
+        padding: 30px 30px 30px 0;
+    }
+    .admin-single-post-title {
+        padding: 40px 0px 0 0;
+    }
+}
+@media (max-width: 500px) {
+    .left-first-row {
+        flex-direction: column-reverse;
+    }
+    .right-first-div {
+        padding: 50px 0 0 20px;
+    }
+}

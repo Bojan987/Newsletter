@@ -1,0 +1,30 @@
+[
+    {
+        "title": "Ukupno",
+        "val": 200
+    },
+    {
+        "title": "Kategorije",
+        "childNodes": [
+            { "title": "Politika", "val": 200 },
+            {
+                "title": "Svet",
+                "val": 200
+            },
+            { "title": "Zdravlje", "val": 200 },
+            { "title": "Sport", "val": 200 }
+        ]
+    },
+    {
+        "title": "Objavljeno",
+        "childNodes": [
+            { "title": "Danas", "val": 200 },
+            {
+                "title": "Ove nedelje",
+                "val": 200
+            },
+            { "title": "Ovog meseca", "val": 200 },
+            { "title": "Ove godine", "val": 200 }
+        ]
+    }
+]

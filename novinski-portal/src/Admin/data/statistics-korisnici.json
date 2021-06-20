@@ -1,0 +1,30 @@
+[
+    {
+        "title": "Ukupno",
+        "val": 200
+    },
+    {
+        "title": "Aktivni",
+        "val": 200
+    },
+    {
+        "title": "Deaktivni",
+        "val": 200
+    },
+    {
+        "title": "Blokirani",
+        "val": 200
+    },
+    {
+        "title": "Registrovani",
+        "childNodes": [
+            { "title": "Danas", "val": 200 },
+            {
+                "title": "Ove Nedelje",
+                "val": 200
+            },
+            { "title": "Ovog Meseca", "val": 200 },
+            { "title": "Ove Godine", "val": 200 }
+        ]
+    }
+]

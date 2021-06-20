@@ -1,0 +1,8 @@
+input#outlined-basic {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 160px !important;
+    height: 30px !important;
+    border: #cccccc !important;
+    color: #909090 !important;
+}

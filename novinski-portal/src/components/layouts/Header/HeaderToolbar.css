@@ -1,0 +1,160 @@
+#header-drawer .MuiDrawer-paper {
+    width: 45% !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#header-drawer::-webkit-scrollbar {
+    display: none;
+}
+#lang-select div::before {
+    border: none;
+}
+#burger-btn {
+    display: none;
+}
+.button {
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    background-color: #f2f2f2 !important;
+}
+
+.login-link {
+    text-decoration: none;
+}
+
+.button:active,
+.button:focus,
+.button:hover {
+    outline: none;
+}
+
+.location {
+    margin-right: 0.5rem;
+    color: #cccccc;
+}
+
+.geo-weather {
+    display: flex;
+    place-content: center space-between;
+    align-items: center;
+    align-content: center;
+}
+.loc {
+    margin: 0 0.3rem;
+    color: #cccccc;
+    font-weight: 900;
+}
+.nav-horizontal {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: 'Libre Franklin', sans-serif;
+}
+
+#login-button {
+    font-family: 'Libre Franklin', sans-serif !important;
+    background: white !important;
+    padding: 1px 35px;
+    font-weight: bolder;
+    font-size: 10px;
+    border: 1px solid #333333;
+    box-shadow: 0px 4px 5px -2px #909090;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+}
+.social-header {
+    display: flex;
+    justify-content: space-around;
+}
+.social-header a {
+    margin: 0;
+}
+
+@media screen and (max-width: 450px) {
+    #header-drawer .MuiDrawer-paper {
+        width: 65% !important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    header {
+        width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    .title-div {
+        width: 90%;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .loc-nonmobile,
+    .lang-nonmobile {
+        display: none;
+    }
+    #search-input {
+        display: none;
+    }
+    #search-input-mobile {
+        display: block;
+        border-radius: 0;
+        margin: 1rem 0;
+        text-align: center;
+    }
+    #burger-btn {
+        display: block;
+        margin-right: 0;
+    }
+    .nav-horizontal {
+        display: none !important;
+    }
+    .nav-vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #333333;
+        overflow-y: auto;
+    }
+    .login-link {
+        display: none !important;
+    }
+    #login-drawer {
+        margin: 10px auto !important;
+        display: block !important;
+    }
+    .nav-vertical-categories {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #333333;
+        overflow-y: auto;
+    }
+    .social-holder {
+        display: none;
+    }
+    .social-header {
+        place-content: center space-evenly;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .geo-weather {
+        margin: 10px auto;
+        place-content: center space-evenly;
+    }
+
+    .loc {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .social-header a {
+        margin: 0 15px;
+    }
+}

@@ -1,0 +1,19 @@
+[
+    {
+        "title": "Ukupno",
+        "val": 10
+    },
+    {
+        "title": "Kategorije",
+        "childNodes": [
+            { "title": "Politika", "val": "20%" },
+            {
+                "title": "Svet",
+                "val": "10%"
+            },
+            { "title": "Zdravlje", "val": "20%" },
+            { "title": "Sport", "val": "10%" }
+        ]
+    }
+    
+]
