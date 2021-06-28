@@ -12,6 +12,7 @@ import Post from '../../components/Cards/Post/Post'
 import Modal from '../../../components/Modal'
 import Loader from '../../components/Loader'
 import { Pagination, PaginationItem } from '@material-ui/lab'
+import { FormattedMessage } from 'react-intl'
 
 import './Posts.css'
 import AppContext from '../../../context/AppContext'
@@ -119,19 +120,6 @@ const Posts = () => {
         return `${newDate} u ${newTime}`
     }
 
-    // const sortFunction = () => {
-    //     let sortedArray = []
-    //     sortMethod === 'comments'
-    //         ? (sortedArray = posts.sort(
-    //               (a, b) => b.numOfComments > a.numOfComments
-    //           ))
-    //         : sortMethod === 'views'
-    //         ? (sortedArray = posts.sort((a, b) => b.visits > a.visits))
-    //         : (sortedArray = posts.sort((a, b) => b.updatedAt > a.updatedAt))
-
-    //     setShowPosts(renderSorted)
-    // }
-
     useEffect(() => {
         const authors = posts
             .map((post) => post.author.firstName + ' ' + post.author.lastName)
@@ -157,7 +145,6 @@ const Posts = () => {
         const response = await axios.get(
             `/post/getPosts?page=${page}&limit=${limit}&category=${category}&${sort}=true`
         )
-        console.log(response.data.postsPaginated)
         setPosts(response.data.postsPaginated)
         setTotalPosts(response.data.numberOfPosts)
     }
@@ -173,7 +160,7 @@ const Posts = () => {
 
     useEffect(() => {
         getPosts(currentPage, rowsPerPage, category, sortMethod)
-    }, [currentPage, category, rowsPerPage, category, sortMethod])
+    }, [currentPage, category, rowsPerPage, sortMethod])
 
     const deletePost = async (id) => {
         try {
@@ -215,10 +202,31 @@ const Posts = () => {
                 ) : (
                     <Content>
                         <div className="filter-methods-div">
-                            <h2 className="posts-page-title">OBJAVE</h2>
+                            {/* <FormattedMessage
+                                id="admin.users"
+                                default="default text"
+                            >
+                                {(message) => (
+                                    <h2 className="posts-page-title">
+                                        {message}
+                                    </h2>
+                                )}
+                            </FormattedMessage> */}
+                            <h2 className="posts-page-title">
+                                <FormattedMessage
+                                    id="admin.posts"
+                                    default="default text"
+                                />
+                            </h2>
                             <div className="filter-methods">
                                 <div className="display-flex">
-                                    <p>Prikaži:</p>
+                                    <p>
+                                        <FormattedMessage
+                                            id="admin.posts.show"
+                                            default="default text"
+                                        />
+                                        :
+                                    </p>
                                     <FormControl
                                         className={classes.formControl}
                                         variant="outlined"
@@ -235,7 +243,13 @@ const Posts = () => {
                                     </FormControl>
                                 </div>
                                 <div className="display-flex">
-                                    <p>Sortiraj:</p>
+                                    <p>
+                                        <FormattedMessage
+                                            id="admin.posts.sort"
+                                            default="default text"
+                                        />
+                                        :
+                                    </p>
                                     <FormControl
                                         className={classes.formControl}
                                         variant="outlined"
@@ -244,17 +258,43 @@ const Posts = () => {
                                             onChange={handleSort}
                                             defaultValue="najnovije"
                                         >
-                                            <option value="latest">
+                                            <FormattedMessage
+                                                id="sort.newest"
+                                                default="default text"
+                                            >
+                                                {(message) => (
+                                                    <option value="latest">
+                                                        {message}
+                                                    </option>
+                                                )}
+                                            </FormattedMessage>
+                                            {/* <option value="latest">
                                                 NAJNOVIJE
-                                            </option>
-                                            <option value="visitsCounter">
+                                            </option> */}
+                                            {/* <option value="visitsCounter">
                                                 BROJ POSETA
-                                            </option>
+                                            </option> */}
+                                            <FormattedMessage
+                                                id="admin.posts.mostpopular"
+                                                default="default text"
+                                            >
+                                                {(message) => (
+                                                    <option value="visitsCounter">
+                                                        {message}
+                                                    </option>
+                                                )}
+                                            </FormattedMessage>
                                         </NativeSelect>
                                     </FormControl>
                                 </div>
                                 <div className="display-flex">
-                                    <p>Kategorija:</p>
+                                    <p>
+                                        <FormattedMessage
+                                            id="admin.posts.category"
+                                            default="default text"
+                                        />
+                                        :
+                                    </p>
                                     <FormControl
                                         className={classes.formControl}
                                         variant="outlined"
@@ -265,15 +305,42 @@ const Posts = () => {
                                                 setCategory(event.target.value)
                                             }
                                         >
-                                            <option value="">SVE</option>
+                                            <FormattedMessage
+                                                id="navmenu.item10"
+                                                default="default text"
+                                            >
+                                                {(message) => (
+                                                    <option value="">
+                                                        {message}
+                                                    </option>
+                                                )}
+                                            </FormattedMessage>
                                             {categories.map((category) => {
                                                 return (
-                                                    <option
+                                                    // <option
+                                                    //     key={category._id}
+                                                    //     value={category._id}
+                                                    // >
+                                                    //     {category.name}
+                                                    // </option>
+                                                    <FormattedMessage
+                                                        id={category.name}
+                                                        default="default text"
                                                         key={category._id}
-                                                        value={category._id}
                                                     >
-                                                        {category.name}
-                                                    </option>
+                                                        {(message) => (
+                                                            <option
+                                                                key={
+                                                                    category._id
+                                                                }
+                                                                value={
+                                                                    category._id
+                                                                }
+                                                            >
+                                                                {message}
+                                                            </option>
+                                                        )}
+                                                    </FormattedMessage>
                                                 )
                                             })}
                                         </NativeSelect>
@@ -282,12 +349,42 @@ const Posts = () => {
                             </div>
                         </div>
                         <PostNav
-                            category="Kategorija"
-                            title="Naziv"
-                            comments="Komentari"
-                            author="Autor"
-                            published="Objavljeno"
-                            views="Posete"
+                            category={
+                                <FormattedMessage
+                                    id="admin.posts.category"
+                                    default="default text"
+                                />
+                            }
+                            title={
+                                <FormattedMessage
+                                    id="admin.posts.name"
+                                    default="default text"
+                                />
+                            }
+                            comments={
+                                <FormattedMessage
+                                    id="admin.posts.comments"
+                                    default="default text"
+                                />
+                            }
+                            author={
+                                <FormattedMessage
+                                    id="admin.posts.author"
+                                    default="default text"
+                                />
+                            }
+                            published={
+                                <FormattedMessage
+                                    id="admin.posts.published"
+                                    default="default text"
+                                />
+                            }
+                            views={
+                                <FormattedMessage
+                                    id="admin.posts.views"
+                                    default="default text"
+                                />
+                            }
                             image=""
                             label={true}
                             alt={false}
@@ -296,7 +393,12 @@ const Posts = () => {
                             return (
                                 <Post
                                     key={post._id}
-                                    category={post.category.name}
+                                    category={
+                                        <FormattedMessage
+                                            id={post.category.name}
+                                            default="default text"
+                                        />
+                                    }
                                     title={post.title}
                                     comments={post.numOfComments}
                                     author={`${post.author.firstName} ${post.author.lastName}`}

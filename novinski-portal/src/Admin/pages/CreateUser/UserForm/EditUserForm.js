@@ -4,6 +4,7 @@ import EditSocialForm from './EditSocialForm'
 import EditUserInfoForm from './EditUserInfoForm'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
     formTitle: {
@@ -36,7 +37,7 @@ const EditUserForm = ({
                 className={classes.formTitle}
                 style={{ borderTop: '1px solid #cccccc', paddingTop: '1rem' }}
             >
-                Osnovne informacije
+                <FormattedMessage id="admin.user.info" default="default text" />
             </Typography>
             <EditUserInfoForm
                 user={user}
@@ -44,7 +45,7 @@ const EditUserForm = ({
                 infoMsg={infoMsg}
             />
             <Typography variant="h4" className={classes.formTitle}>
-                Društvene mreže
+                <FormattedMessage id="admin.social" default="default text" />
             </Typography>
             <EditSocialForm
                 user={user}
@@ -52,7 +53,7 @@ const EditUserForm = ({
                 socialMsg={socialMsg}
             />
             <Typography variant="h4" className={classes.formTitle}>
-                Lozinka
+                <FormattedMessage id="admin.password" default="default text" />
             </Typography>
             <EditPasswordForm
                 submitPassword={passwordFormik}

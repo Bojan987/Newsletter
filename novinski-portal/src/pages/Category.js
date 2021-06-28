@@ -72,15 +72,17 @@ const Category = () => {
         setPage(1)
         try {
             const res = await axios.get(`post/getPrimaryPosts/${id}`)
-            console.log(res.data)
+            console.log(res.data, 'primary')
 
-            if (res.data.numberOfPrimaryPosts !== 0) {
-                setMain(res.data.primaryPosts[0])
-                setPrimary(res.data.primaryPosts.slice(1, 3))
-                setShowPrimary(true)
-                setLoading(false)
-            } else {
-                setShowPrimary(false)
+            if (res.status === 200) {
+                if (res.data.numOfPrimaryPosts !== 0) {
+                    setMain(res.data.primaryPosts[0])
+                    setPrimary(res.data.primaryPosts.slice(1, 3))
+                    setShowPrimary(true)
+                    setLoading(false)
+                } else {
+                    setShowPrimary(false)
+                }
             }
         } catch (err) {
             setLoading(true)
@@ -104,15 +106,18 @@ const Category = () => {
                 },
             })
             console.log(res.data)
-
-            if (res.data.numberOfPosts !== 0) {
-                setPosts(res.data.postsPaginated)
-                setNumberOfPosts(res.data.numberOfPosts)
-                setLoading(false)
+            if (res.status === 200) {
+                if (res.data.numberOfPosts !== 0) {
+                    setPosts(res.data.postsPaginated)
+                    setNumberOfPosts(res.data.numberOfPosts)
+                    setLoading(false)
+                } else {
+                    setPosts(res.data.postsPaginated)
+                    setNumberOfPosts(res.data.numberOfPosts)
+                    setShowPrimary(false)
+                }
             } else {
-                setPosts(res.data.postsPaginated)
-                setNumberOfPosts(res.data.numberOfPosts)
-                setShowPrimary(false)
+                setLoading(true)
             }
         } catch (err) {
             setLoading(true)
@@ -163,22 +168,26 @@ const Category = () => {
                                         onChange={handleChange}
                                         name="sort"
                                     >
-                                        <option value="latest">Latest</option>
-                                        <option value="visitsCounter">
-                                            Visits
-                                        </option>
-
-                                        {/* <FormattedMessage
-                                id="sort.views"
-                                default="default text"
-                                tagName="option"
-                            />
-
-                            <FormattedMessage
-                                id="sort.newest"
-                                default="default text"
-                                tagName="option"
-                            /> */}
+                                        <FormattedMessage
+                                            id="sort.newest"
+                                            default="default text"
+                                        >
+                                            {(message) => (
+                                                <option value="latest">
+                                                    {message}
+                                                </option>
+                                            )}
+                                        </FormattedMessage>
+                                        <FormattedMessage
+                                            id="sort.views"
+                                            default="default text"
+                                        >
+                                            {(message) => (
+                                                <option value="visitsCounter">
+                                                    {message}
+                                                </option>
+                                            )}
+                                        </FormattedMessage>
                                     </NativeSelect>
                                 </FormControl>
                             </div>

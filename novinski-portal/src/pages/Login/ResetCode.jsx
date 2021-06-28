@@ -10,6 +10,7 @@ import AppContext from "../../context/AppContext";
 import { axiosInstance } from "../../util/axios-instance";
 import { Alert } from "@material-ui/lab";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -33,7 +34,7 @@ const ResetCode = () => {
   const history = useHistory();
   const { email } = useParams();
   const ctx = React.useContext(AppContext);
-
+  const intl = useIntl()
   const [snackbar, setSnackbar] = useState({ open: false, message: "default" });
   const [severity, setSeverity] = useState("info");
 
@@ -106,12 +107,12 @@ const ResetCode = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Typography variant="h2" align="center">
-                      FORGOT PASSWORD
+                    {intl.formatMessage({ id: "forgotPassword.title",defaultMessage:'FORGOT PASSWORD' })}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="body2">
-                      Please provide the code we have sent on your email{" "}
+                    {intl.formatMessage({ id: "otp.message",defaultMessage:'Please provide the code we have sent on your email' })}
                     </Typography>
                   </Grid>
 
@@ -127,7 +128,9 @@ const ResetCode = () => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <ButtonWrapper>Submit Form</ButtonWrapper>
+                    <ButtonWrapper>
+                    {intl.formatMessage({ id: "admin.confirm",defaultMessage:'Please provide the code we have sent on your email' })}
+                    </ButtonWrapper>
                   </Grid>
                 </Grid>
               </Form>

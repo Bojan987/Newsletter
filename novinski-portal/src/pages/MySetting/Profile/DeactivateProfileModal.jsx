@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import SelectWrapper from "../../../components/FormsUI/Select/SelectWrapper";
-// import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { makeStyles } from "@material-ui/core/styles";
+import {LangContext} from '../../../intl/IntlWrapper'
 import {
   Box,
   Button,
-  // FormControl,
   Grid,
-  // NativeSelect,
   Typography,
 } from "@material-ui/core";
 import { Formik, Form } from "formik";
@@ -40,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DeactivateProfileModal = ({ handleClose, open }) => {
+
+  const intl=useIntl()
   const classes = useStyles();
   const history = useHistory()
   const initialLeaveState = {
@@ -48,15 +49,30 @@ const DeactivateProfileModal = ({ handleClose, open }) => {
     confirmPass: "",
   };
 
+  const {locale} = useContext(LangContext)
+  
+  
+  const leavingReasonsRS = [
+    "Lose Korisnicko iskustvo",
+    "Usluga nije zadovoljavajuca",
+    "Losa podrska",
+    "Nesto drugo",
+  ]
+  const leavingReasonsEN = [
+    "Bad User experiance",
+    "Unsatisfactory service",
+    "Missing Support",
+    "Other",
+  ]
   const leavingValidation = Yup.object().shape({
-    leavingReason: Yup.string().required("Please Provide Reason."),
+    leavingReason: Yup.string().required(intl.formatMessage({ id: "leavingReason.label" })),
     currentPass: Yup.string()
-      .required("No password provided.")
-      .min(8, "Password is too short - should be 8 chars minimum.")
+      .required(intl.formatMessage({ id: "noPassword" }))
+      .min(8, intl.formatMessage({ id: "invalidPassword" }))
       .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
       confirmPass: Yup.string().oneOf(
       [Yup.ref("currentPass"), null],
-      "Passwords must match"
+      intl.formatMessage({ id: "noMatchPasswords" })
     ),
   });
 
@@ -111,30 +127,25 @@ const DeactivateProfileModal = ({ handleClose, open }) => {
             <Form>
               <Grid container spacing={3}>
                 <Grid item xs={7}>
-                  <Typography variant="h2">Deaktivacija Naloga</Typography>
+                  <Typography variant="h2">{intl.formatMessage({ id: "deactivateAccount.title" })}</Typography>
                 </Grid>
                 <Grid item xs={8}>
                   <Typography variant="body1">
-                    Zao nam je sto odlazite. Nadamo se ponovnom susretu
+                  {intl.formatMessage({ id: "deactivateAccount.message" })}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container spacing={2} alignItems="center">
                     <Grid item xs={3}>
                       <Box py={5}>
-                        <Typography>Razlog odlaska</Typography>
+                        <Typography>{intl.formatMessage({ id: "leavingReason" })}</Typography>
                       </Box>
                     </Grid>
                     <Grid item xs={9}>
                       <SelectWrapper
-                        options={[
-                          "Lose Korisnicko iskustvo",
-                          "Usluga nije zadovoljavajuca",
-                          "nedostaje support",
-                          "drugo",
-                        ]}
+                        options={locale ==='en-US' ? leavingReasonsEN : leavingReasonsRS}
                         name="leavingReason"
-                        label='Izaberite Razlog'
+                        label={intl.formatMessage({ id: "leavingReason.label" })}
                       />
                     </Grid>
                   </Grid>
@@ -142,24 +153,26 @@ const DeactivateProfileModal = ({ handleClose, open }) => {
                 <Grid item xs={12}>
                   <TextfieldWrapper
                     name="currentPass"
-                    label="Please Provide Password"
+                    label={intl.formatMessage({ id: "password.leavingLabel" })}
+                    type='password'
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextfieldWrapper
                     name="confirmPass"
-                    label="Please Confirm Password"
+                    label={intl.formatMessage({ id: "confirmPassword.leavingLabel" })}
+                    type='password'
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container spacing={3} justify="center" alignItems='center'>
                     <Grid item xs={6}>
                       <Button variant="outlined" fullWidth onClick={handleClose}>
-                        Odustani
+                       {intl.formatMessage({ id: "button.close" })}
                       </Button>
                     </Grid>
                     <Grid item xs={6}>
-                      <ButtonWrapper> Obrisi</ButtonWrapper>
+                      <ButtonWrapper> {intl.formatMessage({ id: "button.deactivate" })}</ButtonWrapper>
                     </Grid>
                   </Grid>
                 </Grid>

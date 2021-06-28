@@ -44,6 +44,7 @@ export default function TransitionsModal({ id, handleUserDeleted }) {
 
     React.useEffect(() => {
         handleUserDeleted(user)
+        // eslint-disable-next-line
     }, [user])
 
     const handleModalChange = () => {

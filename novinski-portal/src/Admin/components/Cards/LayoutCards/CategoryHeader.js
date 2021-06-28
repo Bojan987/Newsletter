@@ -31,10 +31,10 @@ const CategoryHeader = () => {
     return (
         <Card className={classes.root} elevetion={0}>
             <Grid container>
-                <Grid item md={1} sm={1}>
+                <Grid item xs={1} md={1} sm={1}>
 
                 </Grid>
-                <Grid item md={7} sm={7}>
+                <Grid item xs={7} md={7} sm={7}>
                     <Box className={classes.container}>
                         <Box className={classes.wrapper}>
                             <Box className={classes.column}>

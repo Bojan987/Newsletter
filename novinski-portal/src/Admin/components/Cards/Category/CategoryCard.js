@@ -33,6 +33,11 @@ const useStyles = makeStyles({
     container: {
         maxWidth: 800,
     },
+    link: {
+        textDecoration: 'none',
+        color: '#231F20',
+        cursor: 'pointer',
+    },
 })
 
 const CategoryCard = ({ data }) => {
@@ -47,7 +52,7 @@ const CategoryCard = ({ data }) => {
     return (
         <Card className={classes.root}>
             <Grid container>
-                <Grid item md={8} sm={8}>
+                <Grid item xs={8} md={8} sm={8}>
                     <Box className={classes.container}>
                         <Box className={classes.wrapperTitle}>
                             <Box className={classes.column}>
@@ -103,14 +108,14 @@ const CategoryCard = ({ data }) => {
                         </Box>
                     </Box>
                 </Grid>
-                <Grid item md={4} sm={12}>
+                <Grid item xs={4} md={4} sm={12}>
                     <Grid container>
                         <DeleteIcon
                             className={classes.icons}
                             onClick={() => deleteCategory(data._id)}
                         />
-                        <Link to={`/edit-category/${data._id}`}>
-                            <EditIcon />
+                        <Link to={`/edit-category/${data._id}`} >
+                            <EditIcon className={classes.link}/>
                         </Link>
                     </Grid>
                 </Grid>

@@ -4,6 +4,7 @@ import { Typography, Box, Button, Grid } from '@material-ui/core'
 //import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ChevronRightOutlinedIcon from '@material-ui/icons/ChevronRightOutlined'
 import { Link } from 'react-router-dom'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
     bigWrapper: {
@@ -59,7 +60,7 @@ const PrimaryBig = ({ mainNews, auth, categoryMain, isCategoryMain }) => {
         : mainNews && mainNews._id
 
     return (
-        <Grid container className={classes.bigWrapper} spacing={10}>
+        <Grid container className={classes.bigWrapper} >
             <Grid container>
                 <Typography
                     variant="h6"
@@ -111,7 +112,10 @@ const PrimaryBig = ({ mainNews, auth, categoryMain, isCategoryMain }) => {
                         endIcon={<ChevronRightOutlinedIcon />}
                     >
                         <Typography color="primary" align="right">
-                            Opsirnije
+                            <FormattedMessage
+                                id="mainnews.learnmore"
+                                default="default text"
+                            />
                         </Typography>
                     </Button>
                 </Grid>

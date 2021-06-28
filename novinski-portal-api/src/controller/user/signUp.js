@@ -8,7 +8,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const signUp = async (req, res, next) => {
 	try {
-		const { email, password, firstName, newsletter } = req.body;
+		const { email, password, firstName, lastName, newsletter } = req.body;
 
 		// const ip = req.ip;
 		// const ipObject = geoip.lookup(ip);

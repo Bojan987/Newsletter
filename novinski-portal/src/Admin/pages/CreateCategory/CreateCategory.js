@@ -46,6 +46,7 @@ const INITIAL_FORM_STATE = {
     homeOrder: 1,
     home: false,
     sidebar: false,
+    type: '',
 }
 
 const FORM_VALIDATION = Yup.object().shape({
@@ -311,12 +312,10 @@ const CreateCategory = () => {
                                                             >
                                                                 <SelectWrapper
                                                                     name="type"
-                                                                    value="Kursna lista"
+                                                                    label="Izaberite"
                                                                     options={[
                                                                         'Kursna lista',
-                                                                        'Kursna lista 1',
-                                                                        'Kursna lista 2',
-                                                                        'Kursna lista 3',
+                                                                        'Najnovije',
                                                                     ]}
                                                                 />
                                                             </Grid>
@@ -341,9 +340,11 @@ const CreateCategory = () => {
                                             </Grid>
                                             <Grid item>
                                                 <ButtonWrapper
-                                                    styles={{
+                                                    style={{
                                                         margin: '0 7px',
                                                         borderRadius: '6px',
+                                                        padding: '6px 15px',
+                                                        boxShadow: 'none',
                                                     }}
                                                 >
                                                     Sacuvaj

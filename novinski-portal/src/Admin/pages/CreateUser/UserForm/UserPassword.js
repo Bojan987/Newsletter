@@ -1,6 +1,7 @@
 import React from 'react'
 import CustomTextInput from '../../../../components/FormsUI/CustomInputs/CustomTextInput'
 import { makeStyles } from '@material-ui/core/styles'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
     passContainer: {
@@ -76,8 +77,18 @@ const UserPassword = ({ names }) => {
         <div className={classes.passContainer}>
             <div className={classes.first}>
                 <div className={classes.labelsDiv}>
-                    <label className={classes.label}>Lozinka</label>
-                    <label className={classes.label}>Potvrda</label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.password"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.confirm"
+                            default="default text"
+                        />
+                    </label>
                 </div>
                 <div className={classes.inputsDiv}>
                     {names.map((name) => {

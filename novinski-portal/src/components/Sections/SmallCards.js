@@ -48,7 +48,8 @@ export default function SmallCards({ categoryId, categoryName }) {
             setPosts(data.primaryPosts)
         }
 
-        postList()
+       postList()
+
     }, [categoryId])
 
     useEffect(() => {

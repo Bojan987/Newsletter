@@ -13,6 +13,7 @@ import AppContext from "../../context/AppContext";
 import {useHistory} from "react-router-dom";
 import { axiosInstance } from "../../util/axios-instance";
 // import AutoCompleteWrapper from "../../components/FormsUI/Select/AutoCompleteWrapper";
+import { useIntl } from "react-intl";
 
 const useStyles = makeStyles((theme) => ({
   formWrapper: {
@@ -26,38 +27,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const INITIAL_FORM_STATE = {
-  firstName: "",
-  // lastName: "",
-  email: "",
-  // phone: "",
-  password: "",
-  // address: "",
-  // city: "",
-  // country: "",
-  newsletter: false,
-};
 
-const FORM_VALIDATION = Yup.object().shape({
-  firstName: Yup.string().required("Required"),
-  // lastName: Yup.string().required("Required"),
-  email: Yup.string().email("Invalid email.").required("Required"),
-  password: Yup.string()
-    .required("No password provided.")
-    .min(8, "Password is too short - should be 8 chars minimum.")
-    .matches(/^(?=.*\d)(?=.*[a-zA-Z]).{8,30}$/, "Password must contain at least 1 number"),
-  // phone: Yup.number()
-  //   .integer()
-  //   .typeError("Please enter a valid phone number")
-  //   .required("Required"),
-  // address: Yup.string().required("Required"),
-  // city: Yup.string().required("Required"),
-  // country: Yup.string().required("Required"),
-  newsletter: Yup.boolean(),
-});
 
 const Register = () => {
 
+  const intl=useIntl()
   const [snackbar, setSnackbar] = useState({ open: false, message: "default" });
   const [severity, setSeverity] = useState("info");
   const classes = useStyles();
@@ -65,6 +39,36 @@ const Register = () => {
   const ctx = React.useContext(AppContext);
 
   ctx.handleAuthHeader(true);
+
+  const INITIAL_FORM_STATE = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    // phone: "",
+    password: "",
+    // address: "",
+    // city: "",
+    // country: "",
+    newsletter: false,
+  };
+  
+  const FORM_VALIDATION = Yup.object().shape({
+    firstName: Yup.string().required("Required"),
+    lastName: Yup.string().required("Required"),
+    email: Yup.string().email(intl.formatMessage({ id: "invalidEmail" })).required("Required"),
+    password: Yup.string()
+      .required(intl.formatMessage({ id: "noPassword" }))
+      .min(8, intl.formatMessage({ id: "invalidPassword" }))
+      .matches(/^(?=.*\d)(?=.*[a-zA-Z]).{8,30}$/, "Password must contain at least 1 number"),
+    // phone: Yup.number()
+    //   .integer()
+    //   .typeError("Please enter a valid phone number")
+    //   .required("Required"),
+    // address: Yup.string().required("Required"),
+    // city: Yup.string().required("Required"),
+    // country: Yup.string().required("Required"),
+    newsletter: Yup.boolean(),
+  });
 
 
   const handleSnackBarOpen = () => {
@@ -88,7 +92,7 @@ const Register = () => {
       setSeverity("success");
       setSnackbar({
         open: true,
-        message: "Register successful! Please Check your Email.",
+        message: intl.formatMessage({ id: "registration.success" }),
       });
       setTimeout(() => {
         
@@ -113,7 +117,7 @@ const Register = () => {
     setSeverity("warning");
     setSnackbar({
       open: true,
-      message: "Registration failed!",
+      message: intl.formatMessage({ id: "registration.fail" }),
     });
       
     }
@@ -147,20 +151,20 @@ const Register = () => {
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <Typography variant="h2" align="center">
-                        REGISTRATION
+                        {intl.formatMessage({ id: "registration.title" })}
                       </Typography>
                     </Grid>
                     {/* <Grid item xs={12}>
                     <Typography variant="h6">Details</Typography>
                   </Grid> */}
 
-                    <Grid item xs={12}>
-                      <TextfieldWrapper name="firstName" label="First Name"  />
+                    <Grid item xs={12} sm={6}>
+                      <TextfieldWrapper name="firstName" label={intl.formatMessage({ id: "firstName" })}  />
                     </Grid>
 
-                    {/* <Grid item xs={6}>
-                    <TextfieldWrapper name="lastName" label="Last Name" />
-                  </Grid> */}
+                    <Grid item xs={12} sm={6}>
+                    <TextfieldWrapper name="lastName" label={intl.formatMessage({ id: "lastName" })} />
+                  </Grid>
 
                     <Grid item xs={12}>
                       <TextfieldWrapper name="email" label="Email" />
@@ -169,7 +173,7 @@ const Register = () => {
                     <Grid item xs={12}>
                       <TextfieldWrapper
                         name="password"
-                        label="Password"
+                        label={intl.formatMessage({ id: "password" })}
                         type="password"
                       />
                     </Grid>
@@ -197,34 +201,33 @@ const Register = () => {
                     <Grid item xs={12}>
                       <CheckboxWrapper
                         name="newsletter"
-                        label="I accept receiving newsletter on email address"
+                        label={intl.formatMessage({ id: "notifications" })}
                       />
                     </Grid>
 
                     <Grid item xs={12}>
-                      <ButtonWrapper disabled={isSubmitting}>Submit Form</ButtonWrapper>
+                      <ButtonWrapper disabled={isSubmitting} type='submit'>{intl.formatMessage({ id: "registerMe" })}</ButtonWrapper>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography align="center" variant="body2">
-                        Creating an account you are agreeing to our{" "}
+                      <Typography  variant="body2">
+                        {intl.formatMessage({ id: "terms.message" })}
                         <Link
                           variant="body2"
                           component={RouterLink}
                           to="/terms"
                         >
                           {" "}
-                          terms of Service
+                          {intl.formatMessage({ id: "terms.link" })}
                         </Link>{" "}
                       </Typography>
-                      <Typography align="center" variant="body2">
-                        And You are accepting our{" "}
+                      <Typography  variant="body2">
+                        {intl.formatMessage({ id: "privacy.message" })}
                         <Link
                           variant="body2"
                           component={RouterLink}
                           to="/terms"
                         >
-                          {" "}
-                          Privacy Policy
+                          {intl.formatMessage({ id: "privacy.link" })}
                         </Link>{" "}
                       </Typography>
                     </Grid>

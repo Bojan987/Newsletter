@@ -1,7 +1,7 @@
 import { Box, Divider, Grid, Tab, Tabs, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import TabPanel from "../../components/TabPanel/TabPanel";
-
+import { useIntl, FormattedMessage } from "react-intl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditProfile from "./Profile/EditProfile";
 import ChangePassword from "./Profile/ChangePassword";
@@ -26,48 +26,44 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     display: "grid",
   },
-  pageMinHeight:{
-    minHeight:'50vh'
+  pageMinHeight: {
+    minHeight: "50vh",
   },
-  smallScreenFonts:{
-      fontSize:'0.9rem',
-    [theme.breakpoints.down('xs')]:{
-      fontSize:'75%',
-      fontWeight:500
+  smallScreenFonts: {
+    fontSize: "0.9rem",
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "75%",
+      fontWeight: 500,
     },
-    [theme.breakpoints.down(370)]:{
-      fontSize:'60%',
-      fontWeight:600
-    }
-  }
+    [theme.breakpoints.down(370)]: {
+      fontSize: "60%",
+      fontWeight: 600,
+    },
+  },
 }));
 
 const MySettings = () => {
-
-  
   const [value, setValue] = useState(0);
-  
+  const intl = useIntl();
   const classes = useStyles();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  
-
   return (
-    <Grid container  >
+    <Grid container>
       <Grid item xs={12}>
         <Box pt={5}>
-          <Typography variant="h2">Podesavanja</Typography>
+          <FormattedMessage id="settings" default="default text">
+            {(message) => <Typography variant="h2">{message}</Typography>}
+          </FormattedMessage>
         </Box>
       </Grid>
-      <Grid item  xs={12} sm={5} md={4} lg={3}>
+      <Grid item xs={12} sm={5} md={4} lg={3}>
         <Box py={2}>
-          <Typography variant="body1" >
-            {" "}
-            Ovde mozete da izmenite svoj profil, promenite preferencije i povezete
-            drustvene mreze
-          </Typography>
+          <FormattedMessage id="settings.description" default="default text">
+            {(message) => <Typography variant="body1"> {message}</Typography>}
+          </FormattedMessage>
         </Box>
       </Grid>
       <Grid item xs={12} md={10}>
@@ -76,18 +72,29 @@ const MySettings = () => {
             value={value}
             onChange={handleChange}
             aria-label="settings tabs"
-            
           >
-            <Tab label="Profil" disableRipple className={classes.smallScreenFonts}/>
-            <Tab label="Preference" disableRipple  className={classes.smallScreenFonts}/>
-            <Tab label="Drustvene mreze" disableRipple  className={classes.smallScreenFonts}/>
+            <Tab
+              label={intl.formatMessage({ id: "settings.profile" })}
+              disableRipple
+              className={classes.smallScreenFonts}
+            />
+            <Tab
+              label={intl.formatMessage({ id: "settings.preferences" })}
+              disableRipple
+              className={classes.smallScreenFonts}
+            />
+            <Tab
+              label={intl.formatMessage({ id: "settings.socialNetworks" })}
+              disableRipple
+              className={classes.smallScreenFonts}
+            />
           </Tabs>
         </Box>
       </Grid>
-      <Grid item xs ={12} lg={10} className={classes.pageMinHeight}>
+      <Grid item xs={12} lg={10} className={classes.pageMinHeight}>
         <TabPanel value={value} index={0}>
           <Grid container>
-            <Grid item  xs={12} md={5}>
+            <Grid item xs={12} md={5}>
               <EditProfile />
             </Grid>
             <Grid item xs={1} className={classes.grid}>
@@ -102,7 +109,7 @@ const MySettings = () => {
           <Preference />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <SocialNetworks/>
+          <SocialNetworks />
         </TabPanel>
       </Grid>
     </Grid>

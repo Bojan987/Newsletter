@@ -6,7 +6,7 @@ import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 import Hidden from '@material-ui/core/Hidden'
 import IconButton from '@material-ui/core/IconButton'
-
+import LanguageBox from '../../components/LanguageBox'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -40,7 +40,6 @@ import Categories from '../pages/Categories'
 import LayoutPage from '../pages/LayoutPage'
 import Statistics from '../pages/Statistics'
 import AppContext from '../../context/AppContext'
-import EditPost2 from '../pages/EditPost2'
 
 const drawerWidth = 200
 
@@ -209,6 +208,7 @@ function ResponsiveDrawer(props) {
                     >
                         Belgrade Times
                     </Typography>
+                    <LanguageBox/>
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">
@@ -250,13 +250,16 @@ function ResponsiveDrawer(props) {
                     <Route path="/categories" component={Categories} />
                     <Route path="/layouts" component={LayoutPage} />
                     <Route path="/users/:id" component={SingleUser} />
-                    <Route path="/single-category/:id" component={SingleCategory} />
+                    <Route
+                        path="/single-category/:id"
+                        component={SingleCategory}
+                    />
                     <Route path="/edit-category/:id" component={EditCategory} />
                     <Route path="/create-category" component={CreateCategory} />
                     <Route path="/create-user" component={CreateUser} />
                     <Route path="/edit-user/:id" component={EditUser} />
                     <Route path="/posts" component={Posts} />
-                    <Route path="/edit-post/:id" component={EditPost2} />
+                    <Route path="/edit-post/:id" component={EditPost} />
                     <Route path="/create-post" component={CreatePost} />
                     <Route path="/view-post/:id" component={AdminSinglePost} />
                 </Switch>

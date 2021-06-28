@@ -140,6 +140,8 @@ export default function AllUsers() {
                 setUsers(res.data.usersPaginated)
                 setNumberOfUsers(res.data.numberOfUsers)
                 setLoading(false)
+            } else {
+                setLoading(true)
             }
         } catch (err) {
             setLoading(true)
@@ -158,30 +160,25 @@ export default function AllUsers() {
         setSortBy(event.target.value)
     }
 
-    const handleUserDeleted = (event) => {
-        setUserDeleted(event)
+    const handleUserDeleted = (value) => {
+        setUserDeleted(value)
     }
 
     return (
-        <Grid
-            container
-            direction="column"
-            xs={12}
-            spacing={2}
-            className={classes.root}
-        >
+        <Grid container direction="column" spacing={2} className={classes.root}>
             <Grid item xs={12}>
                 <Grid container justify={matches ? 'center' : 'flex-start'}>
-                    <Typography
-                        variant="h3"
-                        className={classes.title}
-                        color="primary"
-                    >
-                        <FormattedMessage
-                            id="admin.users"
-                            default="default text"
-                        />
-                    </Typography>
+                    <FormattedMessage id="admin.users" default="default text">
+                        {(message) => (
+                            <Typography
+                                variant="h3"
+                                className={classes.title}
+                                color="primary"
+                            >
+                                {message}
+                            </Typography>
+                        )}
+                    </FormattedMessage>
                 </Grid>
             </Grid>
             <Grid item xs={12}>
@@ -208,32 +205,52 @@ export default function AllUsers() {
                                 onChange={handleRoleSort}
                                 name="sort"
                             >
-                                <option value="all">All</option>
-                                <option value="admin">Admin</option>
-                                <option value="manager">Manager</option>
-                                <option value="journalist">Journalist</option>
-                                <option value="visitor">Visitor</option>
-                                {/* <FormattedMessage
+                                <FormattedMessage
+                                    id="admin.users.role.all"
+                                    default="default text"
+                                >
+                                    {(message) => (
+                                        <option value="all">{message}</option>
+                                    )}
+                                </FormattedMessage>
+                                <FormattedMessage
                                     id="admin.users.role.admin"
                                     default="default text"
-                                    tagName="option"
-                                />
+                                >
+                                    {(message) => (
+                                        <option value="admin">{message}</option>
+                                    )}
+                                </FormattedMessage>
                                 <FormattedMessage
                                     id="admin.users.role.manager"
                                     default="default text"
-                                    tagName="option"
-                                />
+                                >
+                                    {(message) => (
+                                        <option value="manager">
+                                            {message}
+                                        </option>
+                                    )}
+                                </FormattedMessage>
                                 <FormattedMessage
                                     id="admin.users.role.journalist"
                                     default="default text"
-                                    tagName="option"
-                                />
-
+                                >
+                                    {(message) => (
+                                        <option value="journalist">
+                                            {message}
+                                        </option>
+                                    )}
+                                </FormattedMessage>
                                 <FormattedMessage
-                                    id="admin.users.role.basic"
+                                    id="admin.users.role.visitor"
                                     default="default text"
-                                    tagName="option"
-                                /> */}
+                                >
+                                    {(message) => (
+                                        <option value="visitor">
+                                            {message}
+                                        </option>
+                                    )}
+                                </FormattedMessage>
                             </NativeSelect>
                         </FormControl>
                     </Grid>
@@ -254,18 +271,26 @@ export default function AllUsers() {
                                 onChange={handleSort}
                                 name="sort"
                             >
-                                <option value="latest">Latest</option>
-                                <option value="oldest">Oldest</option>
-                                {/* <FormattedMessage
+                                <FormattedMessage
                                     id="sort.newest"
                                     default="default text"
-                                    tagName="option"
-                                />
+                                >
+                                    {(message) => (
+                                        <option value="latest">
+                                            {message}
+                                        </option>
+                                    )}
+                                </FormattedMessage>
                                 <FormattedMessage
                                     id="sort.oldest"
                                     default="default text"
-                                    tagName="option"
-                                /> */}
+                                >
+                                    {(message) => (
+                                        <option value="oldest">
+                                            {message}
+                                        </option>
+                                    )}
+                                </FormattedMessage>
                             </NativeSelect>
                         </FormControl>
                     </Grid>
@@ -418,7 +443,7 @@ export default function AllUsers() {
                         </TableContainer>
                     </Grid>
 
-                    <Grid container xs={12} justify="center" align="center">
+                    <Grid container justify="center" align="center">
                         <Pagination
                             color="secondary"
                             variant="outlined"
@@ -435,7 +460,7 @@ export default function AllUsers() {
                             )}
                         />
                     </Grid>
-                    <Grid container xs={12} justify="flex-end" align="center">
+                    <Grid container justify="flex-end" align="center">
                         <Link to="/create-user" className={classes.link}>
                             <AddCircleIcon
                                 className={classes.button_add}

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { Box, Button, Typography } from '@material-ui/core'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
     btnbox: {
@@ -19,7 +20,9 @@ const CategoryBtn = ({ categoryName, categoryId }) => {
                 component={Link}
                 to={`/category/${categoryName}/${categoryId}`}
             >
-                <Typography>Pogledaj sve</Typography>
+                <Typography>
+                    <FormattedMessage id="button.loadmore" default="default text" />
+                </Typography>
             </Button>
         </Box>
     )

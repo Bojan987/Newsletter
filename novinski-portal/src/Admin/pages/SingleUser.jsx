@@ -14,12 +14,14 @@ import {
 import TabPanel from "../../components/TabPanel/TabPanel";
 import PrimarySmallLayout from "../../components/layouts/gridLayout/PrimarySmallLayout";
 import CommentLayout from "../../components/layouts/gridLayout/CommentLayout";
-
+import { LangContext } from '../../intl/IntlWrapper'
 import PersonalInfo from "../components/Cards/PersonalInfo";
 import { useHistory, useParams } from "react-router";
 import { axiosAuth } from "../../util/axios-instance";
-
+import { FormattedMessage } from "react-intl";
 import { Alert } from "@material-ui/lab";
+import { useIntl} from 'react-intl';
+
 
 const useStyles = makeStyles((theme) => ({
   smallScreenFonts: {
@@ -45,9 +47,9 @@ const SingleUser = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: "default" });
   const [severity, setSeverity] = useState("info");
   const [user, setUser] = useState({});
-  
+  const langctx = React.useContext(LangContext)
   const [load, setLoad] = useState(false);
-  
+  const intl = useIntl();
   const history = useHistory();
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -74,6 +76,11 @@ const SingleUser = () => {
         data: id,
       });
       console.log(deleteComment);
+      setSeverity("success");
+      setSnackbar({
+        open: true,
+        message: langctx.locale==='en-US' ? "Comment Deleted successfully" : 'Komentar uspesno obrisan',
+      });
       setLoad(false);
     } catch (error) {
       setLoad(true);
@@ -89,6 +96,11 @@ const SingleUser = () => {
         userId: id,
       });
       console.log(deleteBookmark);
+      setSeverity("success");
+      setSnackbar({
+        open: true,
+        message: langctx.locale==='en-US' ? "Bookmark Deleted successfully" : 'Bookmark uspesno obrisan',
+      });
       setLoad(false);
     } catch (error) {
       setLoad(true);
@@ -106,7 +118,7 @@ const SingleUser = () => {
       setSeverity("success");
       setSnackbar({
         open: true,
-        message: "Post Deleted successfully",
+        message: langctx.locale==='en-US' ? "Post Deleted successfully" : 'Clanak uspesno obrisan',
       });
       setLoad(false);
     } catch (error) {
@@ -114,7 +126,7 @@ const SingleUser = () => {
       setSeverity("warning");
       setSnackbar({
         open: true,
-        message: "Failed to Delete post",
+        message: langctx.locale==='en-US' ? "Failed to delete Post" : 'Neuspesno brisanje clanka',
       });
       console.log(error.response);
     }
@@ -130,7 +142,7 @@ const SingleUser = () => {
       setSeverity("success");
       setSnackbar({
         open: true,
-        message: "Account Disabled successfully",
+        message: langctx.locale==='en-US' ? "Account Disabled successfully" : 'Nalog deaktiviran uspesno',
       });
 
       setLoad(false);
@@ -139,7 +151,7 @@ const SingleUser = () => {
       setSeverity("warning");
       setSnackbar({
         open: true,
-        message: "Failed to Disable this account",
+        message: langctx.locale==='en-US' ? "Failed to disable account" : 'Neuspesno deaktiviranje naloga',
       });
       console.log(error.response);
     }
@@ -152,7 +164,7 @@ const SingleUser = () => {
       setSeverity("success");
       setSnackbar({
         open: true,
-        message: "Account Deleted successfully",
+        message: langctx.locale==='en-US' ? "Account Deleted successfully" : 'Nalog izbrisan uspesno',
       });
       console.log(deleteAccount);
       setLoad(false);
@@ -161,7 +173,7 @@ const SingleUser = () => {
       setSeverity("warning");
       setSnackbar({
         open: true,
-        message: "Failed to Delete account",
+        message: langctx.locale==='en-US' ? "Failed to delete account" : 'Neuspesno brisanje naloga',
       });
       console.log(error.response);
     }
@@ -209,23 +221,19 @@ const SingleUser = () => {
               textColor='primary'
               
             >
-              {/* <Tab
-            label="Objave"
-            disableRipple
-            className={classes.smallScreenFonts}
-          /> */}
-              <Tab
-                label="Sacuvane Objave"
+              
+                <Tab
+                label={intl.formatMessage({id: "bookmarks"})}
                 disableRipple
                 className={classes.smallScreenFonts}
               />
-              <Tab label="Komentari" disableRipple className={classes.smallScreenFonts} />
+             
+              
+              <Tab label={intl.formatMessage({id: "comments"})} disableRipple className={classes.smallScreenFonts} />
             </Tabs>
           </Grid>
           <Grid item xs={12}>
-            {/* <TabPanel value={value} index={0}>
-          <PrimarySmallLayout data={posts.slice(0, 8)} />
-        </TabPanel> */}
+            
             <TabPanel value={value} index={0}>
               {user.user && user.user.bookmarks.length > 0 ? (
                 <PrimarySmallLayout
@@ -234,7 +242,12 @@ const SingleUser = () => {
                   handleDelete={handleDeleteBookmark}
                 />
               ) : (
-                <Typography variant="h2" color='primary'>Nema Sacuvanih Objava</Typography>
+                <FormattedMessage id="bookmarks.empty" default="default text">
+                {(message) => (
+                  <Typography variant="h2" color='primary'>{message}</Typography>
+                )}
+              </FormattedMessage>
+                
               )}
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -244,7 +257,12 @@ const SingleUser = () => {
                   handleDelete={handleDeleteComment}
                 />
               ) : (
-                <Typography variant="h2" color='primary'>Nema Komentara</Typography>
+                <FormattedMessage id="comments.empty" default="default text">
+                {(message) => (
+                  <Typography variant="h2" color='primary'>{message}</Typography>
+                )}
+              </FormattedMessage>
+                
               )}
             </TabPanel>
           </Grid>
@@ -252,7 +270,12 @@ const SingleUser = () => {
       ) : (
         <>
           <Grid item xs={12} sm={8}>
-            <Typography variant="h2">Moje objave</Typography>
+          <FormattedMessage id="myPosts" default="default text">
+                {(message) => (
+                  <Typography variant="h2">{message}</Typography>
+                )}
+              </FormattedMessage>
+            
           </Grid>
           <Grid item xs={12}>
             {user.posts && user.posts.length > 0 ? (
@@ -262,7 +285,12 @@ const SingleUser = () => {
                 handleDelete={handleDeletePost}
               />
             ) : (
-              <Typography variant="h2" color='primary'>Nemate ni jednu objavu</Typography>
+              <FormattedMessage id="posts.empty" default="default text">
+                {(message) => (
+                  <Typography variant="h2" color='primary'>{message}</Typography>
+                )}
+              </FormattedMessage>
+              
             )}
           </Grid>
         </>
@@ -278,7 +306,7 @@ const SingleUser = () => {
                 history.push(`/edit-user/${user.user._id}`);
               }}
             >
-              Izmeni
+              {intl.formatMessage({id: "button.edit"})}
             </Button>
           </Grid>
           <Grid item xs={6} sm={4} md={2}>
@@ -288,7 +316,8 @@ const SingleUser = () => {
               fullWidth
               onClick={handleDisableAccout}
             >
-              Deaktiviraj
+              
+              {intl.formatMessage({id: "button.deactivate"})}
             </Button>
           </Grid>
           <Grid item xs={12} sm={4} md={2}>
@@ -298,7 +327,7 @@ const SingleUser = () => {
               fullWidth
               onClick={handleDeleteAccount}
             >
-              obrisi
+              {intl.formatMessage({id: "button.delete"})}
             </Button>
           </Grid>
         </Grid>

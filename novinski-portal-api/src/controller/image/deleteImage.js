@@ -7,15 +7,12 @@ export const deleteImage = async (req, res) => {
 
   const model = await modelPicker(userId, modelName);
 
-  let result;
-  try {
-    result = await removeFile(key);
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(500)
-      .json({ message: "Something went wrong with removing from S3" });
-  }
+  if (!model) return res.status(404).json({ message: "Model not found." });
+
+  let result = removeFile(key);
+
+  if (result === undefined)
+    return res.status(403).json({ message: "Removing from S3 failed." });
 
   model.image = "";
   try {
@@ -24,7 +21,7 @@ export const deleteImage = async (req, res) => {
     console.log(error);
     return res
       .status(500)
-      .json({ message: "Something went wrong with removing from DB" });
+      .json({ message: "Something went wrong with removing from DB." });
   }
 
   res.send(result);

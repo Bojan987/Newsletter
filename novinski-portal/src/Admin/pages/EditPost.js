@@ -50,6 +50,8 @@ const LightButton = styled(Button)`
 `
 const ExitButton = styled(Button)`
     margin: 0 7px;
+    border-radius: 5px;
+    padding: 3px 27px;
     background-color: #909090;
     color: white;
     &:hover {
@@ -57,15 +59,7 @@ const ExitButton = styled(Button)`
         background-color: #909090;
     }
 `
-const SaveButton = styled(Button)`
-    margin: 0 7px;
-    background-color: #231f20;
-    color: white;
-    &:hover {
-        color: white;
-        background-color: #231f20;
-    }
-`
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -87,33 +81,50 @@ const FORM_VALIDATION = Yup.object().shape({
     category: Yup.string().required('Izaberite kategoriju'),
 })
 
-const EditPost2 = () => {
+const EditPost = () => {
     const classes = useStyles()
     const [singlePost, setSinglePost] = useState({})
-    const [main, setMain] = useState(false)
-    const [primary, setPrimary] = useState(false)
-    const [light, setLight] = useState(false)
     const { id } = useParams()
-    const [categories, setCategories] = useState([])
-    const [authors, setAuthors] = useState([])
-    const [postCategoryId, setPostCategoryId] = useState('')
     const [numOfComm, setNumOfComm] = useState(0)
-    const [file, setFile] = useState(null)
     const [key, setKey] = React.useState('')
+    const [initValues, setInitValues] = useState(false)
+    const [imgKey, setImgKey] = useState(null)
+    const [image, setImage] = useState(null)
 
-    const getSinglePost = async (id) => {
+    const getData = async (id) => {
         const response = await axios.get(`/post/getSinglePost?postId=${id}`)
-        setPostCategoryId(response.data.post.category._id)
-        setMain(response.data.post.main)
-        setPrimary(response.data.post.primary)
-        setLight(response.data.post.light)
-        const posts = await axios.get('/post/getPosts')
+        const categoryNames = await axios.get('/category/getcategorynames')
+        const postComments = await axios.get(
+            `/comment/getPostComments?postId=${id}`
+        )
+        const journalistsDetails = await axios.get('/user/getJournalists')
+        const authors = journalistsDetails.data.journalists.map((j) => ({
+            _id: j._id,
+            name: `${j.firstName} ${j.lastName}`,
+            noTranslate: true,
+        }))
         setSinglePost(response.data.post)
-    }
-
-    const getCategories = async () => {
-        const response = await axios.get('/category/getcategorynames')
-        setCategories(response.data.categorys)
+        if (response.data.post.imageKey) {
+            setImgKey(response.data.post.imageKey)
+        }
+        setImage(response.data.post.image)
+        const tagsFormated = response.data.post.tags
+            .map((tag) => `#${tag}`)
+            .join(' ')
+        setInitValues({
+            author: response.data.post.author._id,
+            title: response.data.post.title,
+            content: response.data.post.content,
+            category: response.data.post.category._id,
+            tags: tagsFormated,
+            main: response.data.post.main,
+            primary: response.data.post.primary,
+            light: response.data.post.light,
+            id: id,
+            categories: categoryNames.data.categorys,
+            numOfComments: postComments.data.comments.length,
+            authors: authors,
+        })
     }
 
     const getComments = async (id) => {
@@ -138,346 +149,387 @@ const EditPost2 = () => {
         }
     }
 
-    const getJournalists = async () => {
-        const response = await axios.get('/user/getJournalists')
-        const authors = response.data.journalists.map((j) => ({
-            _id: j._id,
-            name: `${j.firstName} ${j.lastName}`,
-        }))
-        setAuthors(authors)
-    }
-
     useEffect(() => {
-        getSinglePost(id)
-        getComments(id)
-        getCategories()
-        getJournalists()
-    }, [])
+        getData(id)
+    }, [id])
 
-    const handleSelectFile = (e) => {
-        const file = e.target.files[0]
-        setFile(file)
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        const formData = new FormData()
-        formData.append('image', file)
-
+    const uploadImage = async (event) => {
         try {
-            const response = await axios.post('/images/uploadImage', formData, {
+            const selectedFile = event.target.files[0]
+            const fileData = new FormData()
+            fileData.append('image', selectedFile, selectedFile.name)
+            const response = await axios.post('/images/uploadImage', fileData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            console.log(response)
             setKey(response.data.imageKey)
         } catch (error) {
-            console.log(error)
+            console.log(error.response)
         }
     }
 
     return (
-        <Formik
-            enableReinitialize
-            initialValues={{
-                postId: id,
-                author:
-                    singlePost && singlePost.author && singlePost.author._id
-                        ? singlePost.author._id
-                        : '',
-                title: singlePost.title ? singlePost.title :'',
-                content:
-                    singlePost && singlePost.content ? singlePost.content : '',
-                category:
-                    singlePost && singlePost.category && singlePost.category._id
-                        ? singlePost.category._id
-                        : '',
-                tags: singlePost.tags
-                    ? singlePost.tags.map((tag) => `#${tag}`).join(' ')
-                    : '',
-                main: main ? main : false,
-                primary: primary ? primary : false,
-                light: light ? light : false,
-            }} 
-            validationSchema={FORM_VALIDATION}
-            onSubmit={async (values) => {
-                try {
-                    const response = await axios.put(`/post/2/${id}`, {
-                        ...values,
-                        tags: values.tags
-                            .split(' ')
-                            .map((tag) => tag.substring(1)),
-                        imageKey: key,
-                    })
-                    console.log(response)
-                    window.location = '/posts'
-                } catch (error) {
-                    console.log(error.response.data.error)
-                }
-            }}
-        >
-            {({ setFieldValue }) => (
-                <Root>
-                    {!singlePost ? (
-                        <Loader />
-                    ) : (
-                        <Form>
-                            <div className="display-flex edit-post-content">
-                                <Left>
-                                    <div className="left-first-row">
-                                        <div
-                                            className="display-flex"
-                                            style={{ alignItems: 'center' }}
-                                        >
-                                            <p className="label">Autor:</p>
-                                            <FormControl
-                                                className={classes.formControl}
-                                                variant="outlined"
-                                            >
-                                                <SelectWrapper
-                                                    variant="outlined"
-                                                    className="category-field"
-                                                    name="author"
-                                                    options={authors.filter(
-                                                        (value, index, array) =>
-                                                            array.indexOf(
-                                                                value
-                                                            ) === index
-                                                    )}
-                                                    // value={postAuthor}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                        <Link to={`/single-post/${id}`}>
-                                            <Button>POGLEDAJ NA SAJTU</Button>
-                                        </Link>
-                                    </div>
-                                    <div>
-                                        <TextfieldWrapper
-                                            id="outlined-size-normal"
-                                            name="title"
-                                            variant="outlined"
-                                            className="title-field"
-                                            value={singlePost.title || ''}
-                                        />
-                                    </div>
-                                    <Field name="content">
-                                        {({ field }) => (
-                                            <ReactQuill
-                                                value={field.value}
-                                                onChange={field.onChange(
-                                                    field.name
-                                                )}
-                                                className={classes.editor}
-                                            />
-                                        )}
-                                    </Field>
-                                </Left>
-                                <Right>
-                                    <div className="right-first-div">
-                                        <div
-                                            className="display-flex"
-                                            style={{ alignItems: 'center' }}
-                                        >
-                                            <p>Kategorija: </p>
-                                            <FormControl
-                                                className={classes.formControl}
-                                            >
-                                                {singlePost &&
-                                                singlePost.category &&
-                                                singlePost.category.name ? (
-                                                    <SelectWrapper
-                                                        variant="outlined"
-                                                        className="category-field"
-                                                        name="category"
-                                                        options={categories}
-                                                    />
-                                                ) : null}
-                                            </FormControl>
-                                        </div>
-                                        <div
-                                            className="display-flex"
-                                            style={{ alignItems: 'baseline' }}
-                                        >
-                                            <p>Tagovi: &nbsp;&nbsp;</p>
-                                            <FormControl
-                                                className={classes.formControl}
-                                                style={{ width: '100%' }}
-                                            >
-                                                <TextfieldWrapper
-                                                    name="tags"
-                                                    variant="outlined"
-                                                    className="tags-field"
-                                                    placeholder="#svet #nafta..."
-                                                    value={
-                                                        singlePost.tags
-                                                            ? singlePost.tags
-                                                                  .map(
-                                                                      (tag) =>
-                                                                          `${tag}`
-                                                                  )
-                                                                  .join(' ')
-                                                            : ''
-                                                    }
-                                                />
-                                            </FormControl>
-                                        </div>
-                                        <div
-                                            className="display-flex"
-                                            style={{
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between',
-                                            }}
-                                        >
-                                            <p>
-                                                Komentari:{' '}
-                                                <span className="comment-field">
-                                                    {numOfComm}
-                                                </span>
-                                            </p>
-                                            <span
-                                                onClick={() =>
-                                                    deleteComments(id)
-                                                }
-                                            >
-                                                <DeleteIcon />
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="right-second-div">
-                                        <MainButton
-                                            main={main ? 1 : 0}
-                                            onClick={async (event) => {
-                                                event.preventDefault()
-                                                if (!main) {
-                                                    const response =
-                                                        await axios.get(
-                                                            '/post/canBeMain'
-                                                        )
-                                                    console.log(response)
-                                                    if (response.data) {
-                                                        setMain(true)
-                                                        setFieldValue(
-                                                            'main',
-                                                            true
-                                                        )
-                                                    }
-                                                } else {
-                                                    setMain(false)
-                                                    setFieldValue('main', false)
-                                                }
-                                            }}
-                                            name="main"
-                                            value={main}
-                                            style={{
-                                                color: main ? 'green' : 'red',
-                                            }}
-                                        >
-                                            MAIN
-                                        </MainButton>
-                                        <PrimaryButton
-                                            primary={primary ? 1 : 0}
-                                            onClick={async (event) => {
-                                                event.preventDefault()
-                                                console.log(postCategoryId)
-                                                if (!primary) {
-                                                    const response =
-                                                        await axios.get(
-                                                            `/post/canBePrimary/${postCategoryId}`
-                                                        )
-                                                    console.log(response)
-
-                                                    if (response.data) {
-                                                        setPrimary(true)
-                                                        setFieldValue(
-                                                            'primary',
-                                                            true
-                                                        )
-                                                    }
-                                                } else {
-                                                    setPrimary(false)
-                                                    setFieldValue(
-                                                        'primary',
-                                                        false
-                                                    )
-                                                }
-                                            }}
-                                            name="primary"
-                                        >
-                                            PRIMARY
-                                        </PrimaryButton>
-                                        <LightButton
-                                            light={light ? 1 : 0}
-                                            onClick={async (event) => {
-                                                setFieldValue('light', !light)
-                                                setLight(!light)
-                                            }}
-                                            name="light"
-                                        >
-                                            LIGHT
-                                        </LightButton>
-                                    </div>
-                                    <div className="right-third-div">
-                                        <div>
-                                            {key.length > 0 ? (
+        <>
+            {initValues ? (
+                <Formik
+                    initialValues={{ ...initValues }}
+                    validationSchema={FORM_VALIDATION}
+                    onSubmit={async (values) => {
+                        try {
+                            const response = await axios.put(
+                                `/post/editPost/${id}`,
+                                {
+                                    postId: values.id,
+                                    author: values.author,
+                                    title: values.title,
+                                    content: values.content,
+                                    category: values.category,
+                                    tags: values.tags
+                                        .split(' ')
+                                        .map((tag) => tag.substring(1)),
+                                    main: values.main,
+                                    primary: values.primary,
+                                    light: values.light,
+                                    imageKey: key,
+                                }
+                            )
+                            console.log(response)
+                            window.location = '/posts'
+                        } catch (error) {
+                            console.log(error.response.data.error)
+                        }
+                    }}
+                >
+                    {({ setFieldValue, values }) => (
+                        <Root>
+                            {!singlePost ? (
+                                <Loader />
+                            ) : (
+                                <Form>
+                                    <div className="display-flex edit-post-content">
+                                        <Left>
+                                            <div className="left-first-row">
                                                 <div
-                                                    key={key}
-                                                    // onClick={handleRemove}
+                                                    className="display-flex"
+                                                    style={{
+                                                        alignItems: 'center',
+                                                    }}
                                                 >
-                                                    <img
-                                                        src={`http://localhost:5000/images/${key}`}
-                                                        style={{
-                                                            width: '300px',
-                                                        }}
-                                                    />
+                                                    <p className="label">
+                                                        Autor:
+                                                    </p>
+                                                    <FormControl
+                                                        className={
+                                                            classes.formControl
+                                                        }
+                                                        variant="outlined"
+                                                    >
+                                                        <SelectWrapper
+                                                            variant="outlined"
+                                                            className="category-field"
+                                                            name="author"
+                                                            options={
+                                                                values.authors
+                                                            }
+                                                            value={
+                                                                values.author
+                                                            }
+                                                        />
+                                                    </FormControl>
                                                 </div>
-                                            ) : (
-                                                <img
-                                                    alt="img"
-                                                    src="/images/site_image.png"
+                                                <Link to={`/single-post/${id}`}>
+                                                    <Button>
+                                                        POGLEDAJ NA SAJTU
+                                                    </Button>
+                                                </Link>
+                                            </div>
+                                            <div>
+                                                <TextfieldWrapper
+                                                    id="outlined-size-normal"
+                                                    name="title"
+                                                    variant="outlined"
+                                                    className="title-field"
+                                                    value={values.title}
                                                 />
-                                            )}
-                                        </div>
-                                        {/* <form onSubmit={handleSubmit}> */}
-                                        <input
-                                            onChange={handleSelectFile}
-                                            type="file"
-                                            accept="image/*"
-                                        />
-                                        <button onClick={handleSubmit}>
-                                            Upload
-                                        </button>
-                                        <p>
-                                            Preporucena velicina: 1280px x 720px
-                                        </p>
+                                            </div>
+                                            <Field name="content">
+                                                {({ field }) => (
+                                                    <ReactQuill
+                                                        value={field.value}
+                                                        onChange={field.onChange(
+                                                            field.name
+                                                        )}
+                                                        className={
+                                                            classes.editor
+                                                        }
+                                                    />
+                                                )}
+                                            </Field>
+                                        </Left>
+                                        <Right>
+                                            <div className="right-first-div">
+                                                <div
+                                                    className="display-flex"
+                                                    style={{
+                                                        alignItems: 'center',
+                                                    }}
+                                                >
+                                                    <p>Kategorija: </p>
+                                                    <FormControl
+                                                        className={
+                                                            classes.formControl
+                                                        }
+                                                    >
+                                                        {singlePost &&
+                                                        singlePost.category &&
+                                                        singlePost.category
+                                                            .name ? (
+                                                            <SelectWrapper
+                                                                variant="outlined"
+                                                                className="category-field"
+                                                                name="category"
+                                                                options={
+                                                                    values.categories
+                                                                }
+                                                                value={
+                                                                    values.category
+                                                                }
+                                                            />
+                                                        ) : null}
+                                                    </FormControl>
+                                                </div>
+                                                <div
+                                                    className="display-flex"
+                                                    style={{
+                                                        alignItems: 'baseline',
+                                                    }}
+                                                >
+                                                    <p>Tagovi: &nbsp;&nbsp;</p>
+                                                    <FormControl
+                                                        className={
+                                                            classes.formControl
+                                                        }
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
+                                                    >
+                                                        <TextfieldWrapper
+                                                            name="tags"
+                                                            variant="outlined"
+                                                            className="tags-field"
+                                                            placeholder="#svet #nafta..."
+                                                            value={values.tags}
+                                                        />
+                                                    </FormControl>
+                                                </div>
+                                                <div
+                                                    className="display-flex"
+                                                    style={{
+                                                        alignItems: 'center',
+                                                        justifyContent:
+                                                            'space-between',
+                                                    }}
+                                                >
+                                                    <p>
+                                                        Komentari:{' '}
+                                                        <span className="comment-field">
+                                                            {numOfComm}
+                                                        </span>
+                                                    </p>
+                                                    <span
+                                                        onClick={() =>
+                                                            deleteComments(id)
+                                                        }
+                                                    >
+                                                        <DeleteIcon />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="right-second-div">
+                                                <MainButton
+                                                    main={values.main ? 1 : 0}
+                                                    onClick={async (event) => {
+                                                        event.preventDefault()
+                                                        if (!values.main) {
+                                                            const response =
+                                                                await axios.get(
+                                                                    '/post/canBeMain'
+                                                                )
+                                                            console.log(
+                                                                response
+                                                            )
+                                                            if (response.data) {
+                                                                setFieldValue(
+                                                                    'main',
+                                                                    true
+                                                                )
+                                                            }
+                                                        } else {
+                                                            setFieldValue(
+                                                                'main',
+                                                                false
+                                                            )
+                                                        }
+                                                    }}
+                                                    name="main"
+                                                    value={values.main}
+                                                    // style={{
+                                                    //     color: values.main ? 'green' : 'red',
+                                                    // }}
+                                                >
+                                                    MAIN
+                                                </MainButton>
+                                                <PrimaryButton
+                                                    primary={
+                                                        values.primary ? 1 : 0
+                                                    }
+                                                    onClick={async (event) => {
+                                                        event.preventDefault()
+                                                        if (!values.primary) {
+                                                            const response =
+                                                                await axios.get(
+                                                                    `/post/canBePrimary/${values.category}`
+                                                                )
+                                                            console.log(
+                                                                response
+                                                            )
+
+                                                            if (response.data) {
+                                                                setFieldValue(
+                                                                    'primary',
+                                                                    true
+                                                                )
+                                                            }
+                                                        } else {
+                                                            setFieldValue(
+                                                                'primary',
+                                                                false
+                                                            )
+                                                        }
+                                                    }}
+                                                    name="primary"
+                                                >
+                                                    PRIMARY
+                                                </PrimaryButton>
+                                                <LightButton
+                                                    light={values.light ? 1 : 0}
+                                                    onClick={async (event) => {
+                                                        setFieldValue(
+                                                            'light',
+                                                            !values.light
+                                                        )
+                                                    }}
+                                                    name="light"
+                                                >
+                                                    LIGHT
+                                                </LightButton>
+                                            </div>
+                                            <div className="right-third-div">
+                                                <div>
+                                                    {key && key.length > 0 ? (
+                                                        <div key={key}>
+                                                            <img
+                                                                src={`http://localhost:5000/images/${key}`}
+                                                                style={{
+                                                                    width: '300px',
+                                                                }}
+                                                                alt="img"
+                                                            />
+                                                        </div>
+                                                    ) : imgKey &&
+                                                      imgKey.length > 0 ? (
+                                                        <div key={imgKey}>
+                                                            <img
+                                                                src={`http://localhost:5000/images/${imgKey}`}
+                                                                style={{
+                                                                    width: '300px',
+                                                                }}
+                                                                alt="img"
+                                                            />
+                                                        </div>
+                                                    ) : image ? (
+                                                        <img
+                                                            alt="img"
+                                                            src={image}
+                                                            style={{
+                                                                width: '300px',
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            alt="img"
+                                                            src="/images/site_image.png"
+                                                            style={{
+                                                                width: '300px',
+                                                            }}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <label htmlFor="upload-photo">
+                                                    <input
+                                                        style={{
+                                                            display: 'none',
+                                                        }}
+                                                        id="upload-photo"
+                                                        name="upload-photo"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={uploadImage}
+                                                    />
+
+                                                    <Button
+                                                        style={{
+                                                            width: 'unset',
+                                                            padding: '4px 27px',
+                                                            borderRadius: '5px',
+                                                            boxShadow: 'none',
+                                                            backgroundColor:
+                                                                '#231f20',
+                                                            color: 'white',
+                                                        }}
+                                                        component="span"
+                                                    >
+                                                        Upload
+                                                    </Button>
+                                                </label>
+                                                <p>
+                                                    Preporucena velicina: 1280px
+                                                    x 720px
+                                                </p>
+                                            </div>
+                                            <div className="right-buttons">
+                                                <Link to="/posts">
+                                                    <ExitButton variant="outlined">
+                                                        Odustani
+                                                    </ExitButton>
+                                                </Link>
+                                                <ButtonWrapper
+                                                    style={{
+                                                        width: 'unset',
+                                                        padding: '4px 27px',
+                                                        borderRadius: '5px',
+                                                        backgroundColor:
+                                                            '#231f20',
+                                                        color: 'white',
+                                                        boxShadow: 'none',
+                                                    }}
+                                                >
+                                                    Sacuvaj
+                                                </ButtonWrapper>
+                                            </div>
+                                        </Right>
                                     </div>
-                                    <div className="right-buttons">
-                                        <Link to="/posts">
-                                            <ExitButton variant="outlined">
-                                                Odustani
-                                            </ExitButton>
-                                        </Link>
-                                        <ButtonWrapper
-                                            style={{
-                                                width: 'unset',
-                                                padding: '6px 20px',
-                                                backgroundColor: '#231f20',
-                                                color: 'white',
-                                            }}
-                                        >
-                                            Sacuvaj
-                                        </ButtonWrapper>
-                                    </div>
-                                </Right>
-                            </div>
-                        </Form>
+                                </Form>
+                            )}
+                        </Root>
                     )}
-                </Root>
+                </Formik>
+            ) : (
+                <Loader />
             )}
-        </Formik>
+        </>
     )
 }
 
-export default EditPost2
+export default EditPost

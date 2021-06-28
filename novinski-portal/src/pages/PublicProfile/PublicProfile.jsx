@@ -7,6 +7,8 @@ import PrimarySmallLayout from "../../components/layouts/gridLayout/PrimarySmall
 import { Pagination, PaginationItem } from "@material-ui/lab";
 import { useParams } from "react-router-dom";
 import {  axiosInstance } from "../../util/axios-instance";
+import { FormattedMessage } from "react-intl";
+
 const useStyles = makeStyles({
   pageMargin: {
     marginTop: "2rem",
@@ -83,7 +85,13 @@ const PublicProfile = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="h4">Nedavne Objave</Typography>
+            
+          <FormattedMessage id="posts" default="default text">
+              {(message) => (
+                <Typography variant="h4">{message}</Typography>
+              )}
+            </FormattedMessage>
+            
           </Grid>
 
           <Grid item>

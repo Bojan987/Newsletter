@@ -4,7 +4,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import PrimarySmallLayout from "../../components/layouts/gridLayout/PrimarySmallLayout";
 import { Pagination, PaginationItem } from "@material-ui/lab";
-
 import { FormattedMessage } from "react-intl";
 import AppContext from "../../context/AppContext";
 import { axiosInstance } from "../../util/axios-instance";
@@ -31,13 +30,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     color: "#909090",
   },
-  invalidSearch:{
-      height: '60vh',
-      
-  }
+  invalidSearch: {
+    height: "60vh",
+  },
 }));
 
-const SearchPage = () => {
+const SearchPage = ({ intl }) => {
   const context = React.useContext(AppContext);
   const classes = useStyles();
   const [page, setPage] = useState(1);
@@ -52,7 +50,6 @@ const SearchPage = () => {
     select: "latest",
   });
   useEffect(() => {
-    
     const fetchCategories = async () => {
       const { data } = await axiosInstance.get(`/category/getCategoryNames`);
       //   console.log(data)
@@ -75,15 +72,28 @@ const SearchPage = () => {
           page,
           context.searchPosts ? context.searchPosts : ""
         );
-        if (context.searchPosts.includes('#') && !context.searchPosts.includes(',')&& !context.searchPosts.includes(' ') ){
-            // console.log('ukljucuje #')
-            const formatedSearch = context.searchPosts.replace(/#/g,',#').substring(1).trim()
-            // console.log(`novi search je :${formatedSearch}`)
-            context.searchPosts = formatedSearch
-        } else if(context.searchPosts.includes('#') && !context.searchPosts.includes(',')&& context.searchPosts.includes(' ')){
-            const formatedSearch = context.searchPosts.replace(/\s#/g,',#').trim()
-            // console.log(`novi search je :${formatedSearch}`)
-            context.searchPosts = formatedSearch
+        if (
+          context.searchPosts.includes("#") &&
+          !context.searchPosts.includes(",") &&
+          !context.searchPosts.includes(" ")
+        ) {
+          // console.log('ukljucuje #')
+          const formatedSearch = context.searchPosts
+            .replace(/#/g, ",#")
+            .substring(1)
+            .trim();
+          // console.log(`novi search je :${formatedSearch}`)
+          context.searchPosts = formatedSearch;
+        } else if (
+          context.searchPosts.includes("#") &&
+          !context.searchPosts.includes(",") &&
+          context.searchPosts.includes(" ")
+        ) {
+          const formatedSearch = context.searchPosts
+            .replace(/\s#/g, ",#")
+            .trim();
+          // console.log(`novi search je :${formatedSearch}`)
+          context.searchPosts = formatedSearch;
         }
         const res = await axiosInstance(`/post/getPostsBySearch`, {
           params: {
@@ -113,7 +123,7 @@ const SearchPage = () => {
     context.searchPosts,
     selected.category,
     selected.select,
-    context
+    context,
   ]);
 
   const handleChange = (event) => {
@@ -131,7 +141,13 @@ const SearchPage = () => {
     <Grid container spacing={5} className={classes.pageMargin}>
       {!context.searchPosts ? (
         <Grid item className={classes.invalidSearch}>
-          <Typography variant="h2"> Please provide Search criteria</Typography>
+          <FormattedMessage id="search.noCriteria" default="default text">
+              {(message) => (
+                <Typography variant="h2" color="primary">
+                  {message}
+                </Typography>
+              )}
+            </FormattedMessage>
         </Grid>
       ) : load ? (
         <div className={classes.loaderWrapper}>
@@ -140,17 +156,25 @@ const SearchPage = () => {
       ) : (
         <>
           <Grid item xs={12}>
-            <Typography variant="h4" color="primary">
-              Rezultati Pretrage za {` "${context.searchPosts}"`}
-            </Typography>
+            <FormattedMessage id="search.criteria" default="default text">
+              {(message) => (
+                <Typography variant="h4" color="primary">
+                  {message} {` "${context.searchPosts}"`}
+                </Typography>
+              )}
+            </FormattedMessage>
           </Grid>
 
-          <Grid item xs={12} sm={11} md={8} lg={7}>
+          <Grid item xs={12}  md={8} lg={8}>
             <Grid container spacing={1}>
               <Grid item xs={4} md={4}>
                 <Grid container spacing={1} alignItems="center">
                   <Grid item xs={12} sm={4}>
-                    <Typography variant="caption">SORTIRAJ</Typography>
+                    <FormattedMessage id="sort.sortBy" default="default text">
+                      {(message) => (
+                        <Typography variant="caption">{message}</Typography>
+                      )}
+                    </FormattedMessage>
                   </Grid>
                   <Grid item>
                     <FormControl className={classes.formControl} fullWidth>
@@ -160,30 +184,43 @@ const SearchPage = () => {
                         name="select"
                         className={classes.selectEmpty}
                       >
-                        {/* <option value="najnovije"> */}
                         <FormattedMessage
                           id="sort.newest"
                           default="default text"
-                          tagName="option"
-                        />
-                        {/* <Typography variant="caption">
-                                    <FormattedMessage
-                                        id="newest"
-                                        default="default text"
-                                    />
-                                </Typography> */}
-                        {/* </option> */}
-                        <option value="visits">Najcitanije</option>
+                        >
+                          {(message) => (
+                            <option value="latest">{message}</option>
+                          )}
+                        </FormattedMessage>
+
+                        <FormattedMessage
+                          id="sort.views"
+                          default="default text"
+                        >
+                          {(message) => (
+                            <option value="visits">{message}</option>
+                          )}
+                        </FormattedMessage>
+                        
                       </NativeSelect>
                     </FormControl>
                   </Grid>
                 </Grid>
               </Grid>
 
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 <Grid container spacing={1} alignItems="center">
-                  <Grid item xs={12} sm={4}>
-                    <Typography variant="caption">KATEGORIJE</Typography>
+                  <Grid item xs={12} sm={5}>
+                    <FormattedMessage
+                      id="search.category"
+                      default="default text"
+                    >
+                      {(message) => (
+                        <Typography variant="caption">
+                          {message}
+                        </Typography>
+                      )}
+                    </FormattedMessage>
                   </Grid>
                   <Grid item>
                     {categories && categories.length !== 0 && (
@@ -194,11 +231,28 @@ const SearchPage = () => {
                           name="category"
                           className={classes.selectEmpty}
                         >
-                          <option value="all">Sve kategorije</option>
+                           <FormattedMessage
+                            id='navmenu.item10'
+                            default="default text"
+                          >
+                            {(message) => (
+                              <option value="all">{message}</option>
+                            )}
+                          </FormattedMessage>
+                          
                           {categories.map((el) => (
-                            <option value={el._id} key={el._id}>
-                              {el.name}
+                            
+                            <FormattedMessage
+                            id={el.name}
+                            default="default text"
+                            key={el._id}
+                          >
+                            {(message) => (
+                              <option value={el._id} >
+                              {message}
                             </option>
+                            )}
+                          </FormattedMessage>
                           ))}
                         </NativeSelect>
                       </FormControl>
@@ -210,7 +264,11 @@ const SearchPage = () => {
               <Grid item xs={3}>
                 <Grid container spacing={1} alignItems="center">
                   <Grid item xs={12} sm={4}>
-                    <Typography variant="caption">PRIKAZI</Typography>
+                  <FormattedMessage id="search.show" default="default text">
+                      {(message) => (
+                        <Typography variant="caption">{message}</Typography>
+                      )}
+                    </FormattedMessage>
                   </Grid>
                   <Grid item>
                     <FormControl className={classes.formControl}>

@@ -43,8 +43,10 @@ const LightButton = styled(Button)`
     color: ${(props) => (props.light ? 'green' : 'red')};
 `
 const EditButton = styled(Button)`
+    padding: 3px 27px;
     margin: 0 7px;
     background-color: #909090;
+    border-radius: 5px;
     color: white;
     &:hover {
         color: white;
@@ -52,7 +54,27 @@ const EditButton = styled(Button)`
     }
 `
 const DeleteButton = styled(Button)`
+    padding: 3px 27px;
     margin: 0 7px;
+    background-color: #231f20;
+    color: white;
+    border-radius: 5px;
+    &:hover {
+        color: white;
+        background-color: #231f20;
+    }
+`
+const ExitButton = styled(Button)`
+    margin: 0 7px 0 0;
+    background-color: #909090;
+    color: white;
+    &:hover {
+        color: white;
+        background-color: #909090;
+    }
+`
+const SaveButton = styled(Button)`
+    margin: 0 0 0 7px;
     background-color: #231f20;
     color: white;
     &:hover {
@@ -85,8 +107,10 @@ const SinglePost = () => {
     const [role, setRole] = useState('')
     const [numOfComm, setNumOfComm] = useState(0)
     const { id } = useParams()
-    const { ExitButton, SaveButton, rand, getModalStyle } = deleteHook()
+    const { getModalStyle } = deleteHook()
     const [modalStyle] = React.useState(getModalStyle)
+    const [imgKey, setImgKey] = useState(null)
+    const [image, setImage] = useState(null)
 
     const getSinglePost = async (id) => {
         const response = await axios.get(`/post/getSinglePost?postId=${id}`)
@@ -102,6 +126,10 @@ const SinglePost = () => {
         setMain(response.data.post.main)
         setPrimary(response.data.post.primary)
         setLight(response.data.post.light)
+        if (response.data.post.imageKey) {
+            setImgKey(response.data.post.imageKey)
+        }
+        setImage(response.data.post.image)
     }
 
     const getComments = async (id) => {
@@ -117,9 +145,8 @@ const SinglePost = () => {
     }, [id])
 
     const openDeleteModal = (id) => {
-        // context.setDeleteId(id)
-        // context.setModalOpen(true)
-        console.log(id)
+        context.setDeleteId(id)
+        context.setModalOpen(true)
     }
 
     const deletePost = async (id) => {
@@ -130,7 +157,7 @@ const SinglePost = () => {
                 },
             })
             console.log(response)
-            window.location.reload()
+            window.location = '/posts'
         } catch (error) {
             console.log(error.response.data.error)
         }
@@ -166,7 +193,7 @@ const SinglePost = () => {
                                 </div>
                                 <div className="author-info">
                                     <h3>{postAuthor}</h3>
-                                    <div class="asp-social">
+                                    <div className="asp-social">
                                         <SocialLinks />
                                     </div>
                                 </div>
@@ -225,11 +252,33 @@ const SinglePost = () => {
                         </div>
                         <div className="right-third-div">
                             <div>
-                                <img
-                                    src={singlePost.image}
-                                    style={{ width: '300px' }}
-                                    alt="alt"
-                                />
+                                {imgKey && imgKey.length > 0 ? (
+                                    <div key={imgKey}>
+                                        <img
+                                            src={`http://localhost:5000/images/${imgKey}`}
+                                            style={{
+                                                width: '300px',
+                                            }}
+                                            alt="img"
+                                        />
+                                    </div>
+                                ) : image ? (
+                                    <img
+                                        alt="img"
+                                        src={image}
+                                        style={{
+                                            width: '300px',
+                                        }}
+                                    />
+                                ) : (
+                                    <img
+                                        alt="img"
+                                        src="/images/site_image.png"
+                                        style={{
+                                            width: '300px',
+                                        }}
+                                    />
+                                )}
                             </div>
                         </div>
                         <div className="right-buttons">
@@ -238,12 +287,12 @@ const SinglePost = () => {
                                     Izmeni
                                 </EditButton>
                             </Link>
-                            <Button
+                            <DeleteButton
                                 variant="outlined"
                                 onClick={() => openDeleteModal(id)}
                             >
                                 Obriši
-                            </Button>
+                            </DeleteButton>
                         </div>
                     </Right>
                 </div>

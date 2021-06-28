@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Board = ({title, data}) => {
     const classes = useStyles()
+
+    console.log(data)
     return (
         <Draggable>
             <Box className={classes.BoardWrap}>
@@ -64,7 +66,7 @@ const Board = ({title, data}) => {
                                     </ListItem>
 
                                     <List component="div" disablePadding>
-                                        {data.overview &&
+                                        {data && data.overview &&
                                             data.overview.map((child, i) => (
                                                 <ListItem
                                                     key={i}

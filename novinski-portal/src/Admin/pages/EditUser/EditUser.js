@@ -99,6 +99,7 @@ const EditUser = () => {
         setTimeout(() => {
             setPasswordMsg('')
         }, 3000)
+        // eslint-disable-next-line
     }, [])
 
     React.useEffect(() => {
@@ -111,6 +112,7 @@ const EditUser = () => {
             .then(() => {
                 setIsLoading(false)
             })
+        // eslint-disable-next-line
     }, [infoFormik, socialFormik])
 
     return (

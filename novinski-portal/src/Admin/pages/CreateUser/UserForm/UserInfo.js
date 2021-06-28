@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import CustomTextInput from '../../../../components/FormsUI/CustomInputs/CustomTextInput'
 import CustomSelect from '../../../../components/FormsUI/CustomInputs/CustomSelect'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
     addUserContainer: {
@@ -113,14 +114,51 @@ const UserInfo = ({ edit, user, names }) => {
         >
             <div className={classes.first}>
                 <div className={classes.labelsDiv}>
-                    <label className={classes.label}>Ime</label>
-                    <label className={classes.label}>Prezime</label>
-                    <label className={classes.label}>Email</label>
-                    <label className={classes.label}>Telefon</label>
-                    <label className={classes.label}>Godina</label>
-                    <label className={classes.label}>Drzava</label>
-                    <label className={classes.label}>Grad</label>
-                    <label className={classes.label}>Adresa</label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.users.name"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.lastName"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage id="email" default="default text" />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.phone"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.age"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.country"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.city"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        <FormattedMessage
+                            id="admin.address"
+                            default="default text"
+                        />
+                    </label>
                 </div>
                 <div className={classes.inputsDiv}>
                     {names.map((name) => {
@@ -142,9 +180,27 @@ const UserInfo = ({ edit, user, names }) => {
             </div>
             <div className={classes.second}>
                 <div className={classes.labelsDiv}>
-                    <label className={classes.label}>Status</label>
-                    <label className={classes.label}>Rola</label>
-                    <label className={classes.label}>Pozicija</label>
+                    <label className={classes.label}>
+                        {' '}
+                        <FormattedMessage
+                            id="admin.users.status"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        {' '}
+                        <FormattedMessage
+                            id="admin.users.role"
+                            default="default text"
+                        />
+                    </label>
+                    <label className={classes.label}>
+                        {' '}
+                        <FormattedMessage
+                            id="admin.users.position"
+                            default="default text"
+                        />
+                    </label>
                 </div>
                 <div className={classes.inputsDiv}>
                     <CustomSelect
@@ -157,10 +213,38 @@ const UserInfo = ({ edit, user, names }) => {
                                 : undefined
                         } */
                     >
-                        <option value="">Choose your status</option>
-                        <option value="active">Aktivan</option>
-                        <option value="inactive">Neaktivan</option>
-                        <option value="deleted">Obrisan</option>
+                        <FormattedMessage
+                            id="admin.choose.status"
+                            default="default text"
+                        >
+                            {(message) => <option value="">{message}</option>}
+                        </FormattedMessage>
+                        <FormattedMessage
+                            id="admin.active"
+                            default="default text"
+                        >
+                            {(message) => (
+                                <option value="active">{message}</option>
+                            )}
+                        </FormattedMessage>
+
+                        <FormattedMessage
+                            id="admin.inactive"
+                            default="default text"
+                        >
+                            {(message) => (
+                                <option value="inactive">{message}</option>
+                            )}
+                        </FormattedMessage>
+
+                        <FormattedMessage
+                            id="admin.deleted"
+                            default="default text"
+                        >
+                            {(message) => (
+                                <option value="deleted">{message}</option>
+                            )}
+                        </FormattedMessage>
                     </CustomSelect>
                     <CustomSelect
                         name="role"
@@ -168,15 +252,45 @@ const UserInfo = ({ edit, user, names }) => {
                         className={classes.select}
                         //defaultValue={user && user.role ? user.role : undefined}
                     >
-                        <option value="">Choose your role</option>
-                        <option value="manager">Manager</option>
-                        <option value="journalist">Novinar</option>
-                        <option value="basic">Posetilac</option>
-                        <option value="admin">Admin</option>
+                        <FormattedMessage
+                            id="admin.choose.role"
+                            default="default text"
+                        >
+                            {(message) => <option value="">{message}</option>}
+                        </FormattedMessage>
+                        <FormattedMessage
+                            id="admin.manager"
+                            default="default text"
+                        >
+                            {(message) => (
+                                <option value="manager">{message}</option>
+                            )}
+                        </FormattedMessage>
+                        <FormattedMessage
+                            id="admin.journalist"
+                            default="default text"
+                        >
+                            {(message) => (
+                                <option value="journalist">{message}</option>
+                            )}
+                        </FormattedMessage>
+                        <FormattedMessage
+                            id="admin.visitor"
+                            default="default text"
+                        >
+                            {(message) => (
+                                <option value="visitor">{message}</option>
+                            )}
+                        </FormattedMessage>
+                        <FormattedMessage id="admin" default="default text">
+                            {(message) => (
+                                <option value="admin">{message}</option>
+                            )}
+                        </FormattedMessage>
                     </CustomSelect>
                     <CustomTextInput
                         type="text"
-                        placeholder="Direktor"
+                        placeholder="position"
                         className={classes.input}
                         name="position"
                         id="position"

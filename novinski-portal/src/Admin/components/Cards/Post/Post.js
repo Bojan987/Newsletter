@@ -142,6 +142,7 @@ export default function ImgMediaCard(props) {
 
     useEffect(() => {
         getNumOfComm(props.id, props.label)
+        // eslint-disable-next-line
     }, [])
 
     return (

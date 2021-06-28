@@ -12,8 +12,8 @@ const HeaderInfo = ({ windowWidth }) => {
     useEffect(() => {
         const unlisten = history.listen(() => {
            
-            if (history.location.pathname ==='/') setToken(localStorage.getItem('token'))
             setToken(localStorage.getItem('token'))
+            if (history.location.pathname ==='/') setToken(localStorage.getItem('token'))
             if(localStorage.getItem('expiresAt')){
                 const date=new Date();
                 const expires = new Date(localStorage.getItem('expiresAt'));

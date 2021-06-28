@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import { makeStyles } from '@material-ui/core/styles'
@@ -48,6 +48,8 @@ const LightButton = styled(Button)`
     color: ${(props) => (props.light ? 'green' : 'red')};
 `
 const ExitButton = styled(Button)`
+    padding: 3px 27px;
+    border-radius: 5px;
     margin: 0 7px;
     background-color: #909090;
     color: white;
@@ -84,13 +86,11 @@ const CreatePost = () => {
     const [light, setLight] = useState(false)
     const [categories, setCategories] = useState([])
     const [alert, setAlert] = useState(false)
-    const [file, setFile] = useState(null)
     const [key, setKey] = React.useState('')
 
     const getCategories = async () => {
         const response = await axios.get('/category/getcategorynames')
         const categories = response.data.categorys
-        // setCategories([{_id: "Izaberite kategoriju", name: "Izaberite kategoriju"}, ...categories])
         setCategories(categories)
     }
 
@@ -122,31 +122,19 @@ const CreatePost = () => {
         }
     }
 
-    // useEffect(() => {
-    //     console.log(values.category)
-    // }, [values.category])
-
-    const handleSelectFile = (e) => {
-        const file = e.target.files[0]
-        setFile(file)
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        const formData = new FormData()
-        formData.append('image', file)
-
+    const uploadImage = async (event) => {
         try {
-            const response = await axios.post('/images/uploadImage', formData, {
+            const selectedFile = event.target.files[0]
+            const fileData = new FormData()
+            fileData.append('image', selectedFile, selectedFile.name)
+            const response = await axios.post('/images/uploadImage', fileData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            console.log(response)
             setKey(response.data.imageKey)
         } catch (error) {
-            console.log(error)
+            console.log(error.response)
         }
     }
 
@@ -169,7 +157,7 @@ const CreatePost = () => {
                 createPost({ ...values, image: key })
             }}
         >
-            {({ setFieldValue }) => (
+            {({ setFieldValue, values }) => (
                 <Root>
                     {!categories ? (
                         <Loader />
@@ -185,15 +173,10 @@ const CreatePost = () => {
                                             className="title-field"
                                         />
                                     </div>
-                                    {/* <TextEditorWrapper
-                                        theme="snow"
-                                        className="content-field"
-                                        name="content"
-                                    /> */}
                                     <ReactQuill
                                         name="content"
                                         theme="snow"
-                                        className="content-field"
+                                        id="content-field"
                                         onChange={(content) => {
                                             setFieldValue('content', content)
                                         }}
@@ -271,27 +254,30 @@ const CreatePost = () => {
                                         <PrimaryButton
                                             primary={primary ? 1 : 0}
                                             onClick={async () => {
-                                                // console.log(postCategoryId)
-                                                if (!primary) {
-                                                    const response =
-                                                        await axios.get(
-                                                            `/post/canBePrimary/`
-                                                        )
-                                                    console.log(response)
+                                                try {
+                                                    if (!primary) {
+                                                        const response =
+                                                            await axios.get(
+                                                                `/post/canBePrimary/${values.category}`
+                                                            )
+                                                        console.log(response)
 
-                                                    if (response.data) {
-                                                        setPrimary(true)
+                                                        if (response.data) {
+                                                            setPrimary(true)
+                                                            setFieldValue(
+                                                                'primary',
+                                                                true
+                                                            )
+                                                        }
+                                                    } else {
+                                                        setPrimary(false)
                                                         setFieldValue(
                                                             'primary',
-                                                            true
+                                                            false
                                                         )
                                                     }
-                                                } else {
-                                                    setPrimary(false)
-                                                    setFieldValue(
-                                                        'primary',
-                                                        false
-                                                    )
+                                                } catch (error) {
+                                                    console.log(error)
                                                 }
                                             }}
                                             name="primary"
@@ -321,6 +307,7 @@ const CreatePost = () => {
                                                         style={{
                                                             width: '300px',
                                                         }}
+                                                        alt="Post pic"
                                                     />
                                                 </div>
                                             ) : (
@@ -330,16 +317,40 @@ const CreatePost = () => {
                                                 />
                                             )}
                                         </div>
-                                        {/* <form onSubmit={handleSubmit}> */}
-                                        <input
+                                        {/* <input
                                             onChange={handleSelectFile}
                                             type="file"
                                             accept="image/*"
                                         />
                                         <button onClick={handleSubmit}>
                                             Upload
-                                        </button>
-                                        {/* </form> */}
+                                        </button> */}
+
+                                        <label htmlFor="upload-photo">
+                                            <input
+                                                style={{ display: 'none' }}
+                                                id="upload-photo"
+                                                name="upload-photo"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={uploadImage}
+                                            />
+
+                                            <Button
+                                                style={{
+                                                    width: 'unset',
+                                                    padding: '4px 27px',
+                                                    borderRadius: '5px',
+                                                    boxShadow: 'none',
+                                                    backgroundColor: '#231f20',
+                                                    color: 'white',
+                                                }}
+                                                component="span"
+                                            >
+                                                Upload
+                                            </Button>
+                                        </label>
+
                                         <p>
                                             Preporucena velicina: 1280px x 720px
                                         </p>
@@ -353,7 +364,9 @@ const CreatePost = () => {
                                         <ButtonWrapper
                                             style={{
                                                 width: 'unset',
-                                                padding: '6px 20px',
+                                                padding: '4px 27px',
+                                                borderRadius: '5px',
+                                                boxShadow: 'none',
                                                 backgroundColor: '#231f20',
                                                 color: 'white',
                                             }}

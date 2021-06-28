@@ -8,6 +8,7 @@ import UserSocial from './UserSocial'
 import UserInfo from './UserInfo'
 import UserSubmitButton from './UserSubmitButton'
 import { axiosAuth as axios } from '../../../../util/axios-instance'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
     formContainer: {
@@ -134,7 +135,10 @@ const UserForm = () => {
             <Form>
                 <div className={classes.fornContainer}>
                     <Typography variant="h4" className={classes.formTitle}>
-                        Dodavanje novog korisnika
+                        <FormattedMessage
+                            id="admin.add.user"
+                            default="default text"
+                        />
                     </Typography>
                     <UserInfo
                         names={[
@@ -149,13 +153,19 @@ const UserForm = () => {
                         ]}
                     />
                     <Typography variant="h4" className={classes.formTitle}>
-                        Društvene mreže
+                        <FormattedMessage
+                            id="admin.social"
+                            default="default text"
+                        />
                     </Typography>
                     <UserSocial
                         names={['facebook', 'instagram', 'twitter', 'linkedin']}
                     />
                     <Typography variant="h4" className={classes.formTitle}>
-                        Lozinka
+                        <FormattedMessage
+                            id="admin.password"
+                            default="default text"
+                        />
                     </Typography>
                     <UserPassword names={['password', 'repeatPassword']} />
                     <UserSubmitButton message={createMsg} />

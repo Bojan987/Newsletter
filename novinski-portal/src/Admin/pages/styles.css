@@ -4,8 +4,10 @@
 .comment-field,
 .category-field,
 .tags-field,
-.author-field,
-.content-field {
+.author-field {
+    color: #909090;
+}
+#content-field {
     color: #909090;
 }
 .tags-field {
@@ -16,7 +18,7 @@
     padding: 0 0 0 15px;
     width: 100%;
 }
-.content-field p {
+#content-field p {
     font-size: 17px;
     padding: 15px;
 }

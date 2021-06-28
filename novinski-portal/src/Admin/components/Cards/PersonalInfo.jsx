@@ -2,6 +2,8 @@ import { Divider, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { makeStyles,useTheme,useMediaQuery } from "@material-ui/core";
+import { useIntl} from 'react-intl';
+import { LangContext } from '../../../intl/IntlWrapper'
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -40,9 +42,21 @@ const PersonalInfo = ({user}) => {
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
   const smallScreen = useMediaQuery(theme.breakpoints.down(410))
   const date = new Date(user.lastLogin);
-  const formatedDate =
+  const intl = useIntl()
+  const langctx = React.useContext(LangContext)
+  const formatedDateRs =
     date &&
     date.toLocaleString("sr-Latn-RS", {
+      day: "numeric", // numeric, 2-digit
+      year: "numeric", // numeric, 2-digit
+      month: "long", // numeric, 2-digit, long, short, narrow
+      hour: "numeric", // numeric, 2-digit
+      minute: "numeric", // numeric, 2-digit
+    });
+    
+    const formatedDateEn =
+    date &&
+    date.toLocaleString("en-US", {
       day: "numeric", // numeric, 2-digit
       year: "numeric", // numeric, 2-digit
       month: "long", // numeric, 2-digit, long, short, narrow
@@ -56,7 +70,7 @@ const PersonalInfo = ({user}) => {
         <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              Email:
+            {intl.formatMessage({id: "email"})}
             </Typography>
           </Grid>
           <Grid item xs={9} sm={6}>
@@ -73,7 +87,7 @@ const PersonalInfo = ({user}) => {
                   : classes.warning
               }
             >
-              {user.emailConfirmed ? 'CONFIRMED' : "UNCONFIRMED"}
+              {user.emailConfirmed ? intl.formatMessage({id: "confirmed"}) : intl.formatMessage({id: "unconfirmed"})}
             </Typography>:
             <Grid container alignItems='center' justify='flex-end'>
 
@@ -90,48 +104,48 @@ const PersonalInfo = ({user}) => {
         <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              Phone:
+            {intl.formatMessage({id: "phone"})}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="body1" className={classes.overflow}>
-              {user.phone ? user.phone : 'No Phone provided'}
+              {user.phone ? user.phone : intl.formatMessage({id: "noPhone"})}
             </Typography>
           </Grid>
         </Grid>
         <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              Country:
+            {intl.formatMessage({id: "country"})}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="body1" className={classes.overflow}>
-              {user.country ? user.country :"No Country provided"}
+              {user.country ? user.country : intl.formatMessage({id: "noCountry"})}
             </Typography>
           </Grid>
         </Grid>
         <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              City:
+            {intl.formatMessage({id: "city"})}
             </Typography>
           </Grid>{" "}
           <Grid item xs={12} sm={6}>
             <Typography variant="body1" className={classes.overflow}>
-              {user.city ? user.city :"No City provided"}
+              {user.city ? user.city :intl.formatMessage({id: "noCity"})}
             </Typography>
           </Grid>
         </Grid>
         <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              Address:
+            {intl.formatMessage({id: "address"})}
             </Typography>
           </Grid>{" "}
           <Grid item xs={12} sm={6}>
             <Typography variant="body1" className={classes.overflow}>
-              {user.address ? user.address :"No Address provided"}
+              {user.address ? user.address :intl.formatMessage({id: "noAddress"})}
             </Typography>
           </Grid>
         </Grid>
@@ -143,31 +157,31 @@ const PersonalInfo = ({user}) => {
       <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              Last Login:
+            {intl.formatMessage({id: "lastLogin"})}
             </Typography>
           </Grid>{" "}
           <Grid item xs={12} sm={6}>
             <Typography variant="body1" className={classes.overflow}>
-              {formatedDate ? formatedDate:"Unknown"}
+              {langctx.locale==='en-US' && formatedDateEn ? formatedDateEn : langctx.locale==='sr-RS' && formatedDateRs ? formatedDateRs : "Unknown" }
             </Typography>
           </Grid>
         </Grid>
         <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              Last IP:
+            {intl.formatMessage({id: "lastIp"})}
             </Typography>
           </Grid>{" "}
           <Grid item xs={12} sm={6}>
             <Typography variant="body1" className={classes.overflow}>
-              {user.lastIpAddress ? user.lastIpAddress :"Unknown" }
+              {user.lastIpAddress ? user.lastIpAddress : intl.formatMessage({id: "noAddress"}) }
             </Typography>
           </Grid>
         </Grid>
         <Grid container className={classes.paddingY}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" color="primary">
-              Status:
+            {intl.formatMessage({id: "status"})}
             </Typography>
           </Grid>{" "}
           <Grid item xs={12} sm={6}>

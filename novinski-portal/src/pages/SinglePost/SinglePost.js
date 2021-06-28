@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import './SinglePost.css'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
+//import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 import { CommentsForm } from '../../components/CommentsForm'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import SingleComment from '../../components/Comments/SingleComment'
 import ProfileCard from '../../components/Cards/ProfileCard'
 import { axiosAuth as axios } from '../../util/axios-instance'
-import SocialLinks from '../../components/SocialLinks'
+//import SocialLinks from '../../components/SocialLinks'
 
 const Root = styled.div`
     margin: auto;
     padding: 20px 0;
 `
 
-const AvatarIcon = styled(AccountCircleOutlinedIcon)`
+/* const AvatarIcon = styled(AccountCircleOutlinedIcon)`
     font-size: 60px;
-`
+` */
 
 const useStyles = makeStyles((theme) => ({
     formTypography: {
@@ -82,6 +82,7 @@ const SinglePost = () => {
             setErrorState(error.response.data.error)
         }
     }
+    
 
     return (
         <Root>
@@ -140,7 +141,7 @@ const SinglePost = () => {
                     </div>
                 </div> */}
                 {author && (
-                    <ProfileCard size="big" data={author} avatar={'avatar'} />
+                    <ProfileCard size="big" data={author} avatar={'avatar'} publicProfile={true}/>
                 )}
             </div>
             <div className="bookmarks">

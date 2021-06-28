@@ -7,6 +7,7 @@ import ButtonWrapper from "../../../components/FormsUI/Button/ButtonWrapper";
 import { axiosAuth } from "../../../util/axios-instance";
 import { Alert } from "@material-ui/lab";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 const initialNotificationState = {
   newsNotifications: false,
@@ -19,6 +20,8 @@ const notificationValidation = Yup.object().shape({
 });
 
 const Preference = () => {
+
+  const intl=useIntl()
   const [snackbar, setSnackbar] = useState({ open: false, message: "default" });
   const [severity, setSeverity] = useState("info");
 
@@ -38,7 +41,7 @@ const Preference = () => {
       setSeverity("success");
       setSnackbar({
         open: true,
-        message: "Your Preferences are changed successfuly",
+        message: intl.formatMessage({ id: "preference.success" }),
       });
     } catch (err) {
       console.log(err.response);
@@ -70,20 +73,20 @@ const Preference = () => {
             <Grid item xs={12}>
               <CheckboxWrapper
                 name="newsNotifications"
-                label="Obavesti me o novostima na platformi"
+                label={intl.formatMessage({ id: "preferenceNews.label" })}
               />
             </Grid>
 
             <Grid item xs={12}>
               <CheckboxWrapper
                 name="commentsNotification"
-                label="Obavesti me o odgovorima na moje komentare"
+                label={intl.formatMessage({ id: "preferenceComments.label" })}
               />
             </Grid>
             <Grid item xs={12} sm={7} md={6}>
               <Grid container justify="flex-end">
                 <Grid item xs={12} sm={5} md={4} lg={4}>
-                  <ButtonWrapper>Submit Form</ButtonWrapper>
+                  <ButtonWrapper>{intl.formatMessage({ id: "submitForm" })}</ButtonWrapper>
                 </Grid>
               </Grid>
             </Grid>

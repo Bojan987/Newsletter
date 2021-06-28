@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import { FormControl, NativeSelect,Fab } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-import { FormattedMessage } from 'react-intl'
+//import { FormattedMessage } from 'react-intl'
 import { makeStyles } from '@material-ui/core/styles'
 import { axiosAuth as axios} from '../../util/axios-instance'
 
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LayoutPage = () => {
     const classes = useStyles()
-    const [sortBy, setSortBy] = useState('najnovije')
+    const [sortBy, setSortBy] = useState('')
     // const [openDel, setOpenDel] = useState(false)
     // const [openEdit, setOpenEdit] = useState(false)
     // const [modalStyle] = useState(getModalStyle)
@@ -105,8 +105,6 @@ const LayoutPage = () => {
     }, [sortBy])
 
     
-
-    console.log(layout)
 
     const handleSort = (event) => {
         setSortBy(event.target.value)
@@ -134,13 +132,14 @@ const LayoutPage = () => {
                         onChange={handleSort}
                         name="sort"
                     >
-                        <FormattedMessage
+                        {/* <FormattedMessage
                             id="sort.newest"
                             default="default text"
                             tagName="option"
-                        />
+                        /> */}
 
-                        <option value="updated">Najcitanije</option>
+                        <option value="latest">Najcitanije</option>
+                        <option value="updated">Najnovije</option>
                     </NativeSelect>
                 </FormControl>
             </Box>

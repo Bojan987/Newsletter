@@ -100,7 +100,6 @@ const CategoryList = ({ isMobile, handleDrawer, isFooter }) => {
         fetchCategories()
     }, [])
 
-
     const half = Math.ceil(categories.length / 2)
 
     let nav
@@ -136,7 +135,10 @@ const CategoryList = ({ isMobile, handleDrawer, isFooter }) => {
                                 className={link}
                                 onClick={handleDrawer}
                             >
-                                {el.name}
+                                <FormattedMessage
+                                    id={el.name}
+                                    default="default text"
+                                ></FormattedMessage>
                             </Link>
                         </li>
                     ))}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
@@ -9,6 +9,7 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import Paper from '@material-ui/core/Paper'
 import styled from 'styled-components'
 import moment from 'moment'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -79,8 +80,6 @@ const Latest = ({ categoryPosts }) => {
     const classes = useStyles()
     const [showLatest, setShowLatest] = useState(true)
 
-
-
     // const time = (published) => {
     //     const dateTime = published.split(' ')
     //     const dateArr = dateTime[0].split('-')
@@ -121,6 +120,8 @@ const Latest = ({ categoryPosts }) => {
     //     })
     // }
 
+    // "articles.newest": "Latest",
+    // "articles.mostvisited": "Most views"
     return (
         <>
             <Paper>
@@ -130,14 +131,20 @@ const Latest = ({ categoryPosts }) => {
                         variant="h5"
                         onClick={() => setShowLatest(true)}
                     >
-                        NAJNOVIJE
+                        <FormattedMessage
+                            id="articles.newest"
+                            default="default text"
+                        />
                     </LatestCell>
                     <MostReadCell
                         islatest={showLatest ? 1 : 0}
                         variant="h5"
                         onClick={() => setShowLatest(false)}
                     >
-                        NAJCITANIJE
+                         <FormattedMessage
+                            id="articles.mostvisited"
+                            default="default text"
+                        />
                     </MostReadCell>
                 </Box>
             </Paper>
@@ -145,7 +152,11 @@ const Latest = ({ categoryPosts }) => {
                 <>
                     {showLatest
                         ? categoryPosts
-                              .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+                              .sort(
+                                  (a, b) =>
+                                      new Date(b.updatedAt) -
+                                      new Date(a.updatedAt)
+                              )
                               .map((post) => {
                                   return (
                                       <CardActionArea
@@ -189,7 +200,6 @@ const Latest = ({ categoryPosts }) => {
                                           component={Link}
                                           to={`/single-post/${post._id}`}
                                       >
-                                          
                                           <Box className={classes.postDetails}>
                                               <Typography
                                                   variant="h5"

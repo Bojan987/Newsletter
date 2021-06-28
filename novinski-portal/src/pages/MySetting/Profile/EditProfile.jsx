@@ -11,6 +11,8 @@ import { axiosAuth, axiosInstance } from "../../../util/axios-instance";
 import { useHistory } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
 import Avatar from "@material-ui/core/Avatar";
+import { useIntl } from "react-intl";
+
 
 const useStyles = makeStyles((theme) => ({
   medium: {
@@ -55,7 +57,7 @@ const EditProfile = () => {
   const [myUserInfo, setMyUserInfo] = useState({});
   const [snackbar, setSnackbar] = useState({ open: false, message: "default" });
   const [severity, setSeverity] = useState("info");
-  
+  const intl=useIntl()
   const [load,setLoad] = useState(false)
   const configButton = {
     variant: "contained",
@@ -118,7 +120,7 @@ const EditProfile = () => {
       setSeverity("success");
       setSnackbar({
         open: true,
-        message: "Your Profile is eddited successfuly",
+        message: intl.formatMessage({ id: "editUser.success" }),
       });
       setLoad(false)
     } catch (err) {
@@ -127,7 +129,7 @@ const EditProfile = () => {
       setSeverity("warning");
       setSnackbar({
         open: true,
-        message: "Your Profile edit failed.Token Expired",
+        message: intl.formatMessage({ id: "editUser.fail" }),
       });
       setTimeout(() => {
         history.push("/");
@@ -156,7 +158,7 @@ const EditProfile = () => {
         setSeverity("warning");
         setSnackbar({
           open: true,
-          message: "Please add image with less then 1MB in size",
+          message: intl.formatMessage({ id: "imageUpload.warning" }),
         });
       } else {
         const fileData = new FormData();
@@ -176,7 +178,7 @@ const EditProfile = () => {
         setSeverity("success");
         setSnackbar({
           open: true,
-          message: "Image uploaded successfuly",
+          message: intl.formatMessage({ id: "imageUpload.success" }),
         });
         setLoad(false)
       }
@@ -186,7 +188,7 @@ const EditProfile = () => {
       setSeverity("warning");
         setSnackbar({
           open: true,
-          message: "Image upload Failed!",
+          message: intl.formatMessage({ id: "imageUpload.fail" }),
         });
     }
   };
@@ -197,7 +199,7 @@ const EditProfile = () => {
         setSeverity("warning");
         setSnackbar({
           open: true,
-          message: "No image to delete",
+          message: intl.formatMessage({ id: "imageDelete.none" }),
         });
       } else {
         setLoad(true)
@@ -214,7 +216,7 @@ const EditProfile = () => {
         setSeverity("success");
         setSnackbar({
           open: true,
-          message: "Image deleted successfuly",
+          message: intl.formatMessage({ id: "imageDelete.success" }),
         });
         setLoad(false)
       }
@@ -223,7 +225,7 @@ const EditProfile = () => {
       setSeverity("warning");
         setSnackbar({
           open: true,
-          message: "Image deleted Failed",
+          message: intl.formatMessage({ id: "imageDelete.fail" }),
         });
         setLoad(true)
     }
@@ -269,13 +271,13 @@ const EditProfile = () => {
                 />
 
                 <Button {...configButton} component="span">
-                  Upload Image
+                  {intl.formatMessage({ id: "button.upload" })}
                 </Button>
               </label>
             </Box>
             <Box pt={1}>
               <Typography variant="body2">
-                Preporucena velicina 256px x 256px
+                {intl.formatMessage({ id: "button.upload.description" })}
               </Typography>
             </Box>
           </Grid>
@@ -296,7 +298,7 @@ const EditProfile = () => {
                 <Grid item xs={12}>
                   <TextfieldWrapper
                     name="email"
-                    label="Email"
+                    label={intl.formatMessage({ id: "email" })}
                     value={
                       myUserInfo && myUserInfo.email ? myUserInfo.email : ""
                     }
@@ -306,7 +308,7 @@ const EditProfile = () => {
                 <Grid item xs={12}>
                   <TextfieldWrapper
                     name="phone"
-                    label="Phone Number"
+                    label={intl.formatMessage({ id: "phone" })}
                     value={
                       myUserInfo && myUserInfo.phone ? myUserInfo.phone : ""
                     }
@@ -315,7 +317,7 @@ const EditProfile = () => {
                 <Grid item xs={12}>
                   <TextfieldWrapper
                     name="description"
-                    label="Description"
+                    label={intl.formatMessage({ id: "description" })}
                     rows="5"
                     multiline={true}
                     value={
@@ -327,7 +329,7 @@ const EditProfile = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Box ml="auto">
-                    <ButtonWrapper>Submit Form</ButtonWrapper>
+                    <ButtonWrapper>{intl.formatMessage({ id: "submitForm" })}</ButtonWrapper>
                   </Box>
                 </Grid>
               </Grid>

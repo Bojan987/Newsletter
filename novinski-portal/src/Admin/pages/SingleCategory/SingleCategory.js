@@ -97,7 +97,7 @@ const SingleCategory = () => {
     const context = useContext(AppContext)
     const [deleteItem, setDeleteItem] = useState('')
 
-    const { rand, getModalStyle } = deleteHook()
+    const { getModalStyle } = deleteHook()
     const [modalStyle] = React.useState(getModalStyle)
 
     const getSingleCategory = async (id) => {

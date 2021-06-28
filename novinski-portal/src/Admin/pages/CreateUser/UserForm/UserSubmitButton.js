@@ -1,4 +1,5 @@
 import React from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import './UserSubmitBtn.css'
 
@@ -13,7 +14,7 @@ const UserSubmitButton = ({ edit, message, password }) => {
         <div className="buttonContainer" style={editStyles}>
             <p className="notification">{message}</p>
             <button className="submitButton" type="submit">
-                Submit
+                <FormattedMessage id="submit" default="default text" />
             </button>
         </div>
     )

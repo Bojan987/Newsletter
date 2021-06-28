@@ -10,6 +10,7 @@ import { useHistory, useParams } from "react-router";
 import { axiosInstance } from "../../util/axios-instance";
 import { Alert } from "@material-ui/lab";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -35,6 +36,7 @@ const ResetPassword = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: "default" });
   const [severity, setSeverity] = useState("info");
   ctx.handleAuthHeader(true);
+  const intl = useIntl()
 
   const handleSnackBarOpen = () => {
     setSnackbar((previous) => {
@@ -123,7 +125,7 @@ const ResetPassword = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Typography variant="h2" align="center">
-                      RESET PASSWORD
+                    {intl.formatMessage({ id: "resetPassword.title",defaultMessage:'RESET PASSWORD' })}
                     </Typography>
                   </Grid>
 
@@ -139,7 +141,9 @@ const ResetPassword = () => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <ButtonWrapper>Submit Form</ButtonWrapper>
+                    <ButtonWrapper>
+                    {intl.formatMessage({ id: "admin.confirm",defaultMessage:'CONFIRM' })}
+                    </ButtonWrapper>
                   </Grid>
                 </Grid>
               </Form>

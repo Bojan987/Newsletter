@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, Snackbar } from "@material-ui/core";
 import React, { useState } from "react";
-
+import { useIntl } from "react-intl";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import TextfieldWrapper from "../../../components/FormsUI/Textfield/TextfieldWrapper";
@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ChangePassword = () => {
+
+  const intl=useIntl()
   const classes = useStyles();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openDeactivateModal, setOpenDeactivateModal] = useState(false);
@@ -54,16 +56,16 @@ const ChangePassword = () => {
 
   const formValidation = Yup.object().shape({
     password: Yup.string()
-      .required("No password provided.")
-      .min(8, "Password is too short - should be 8 chars minimum.")
+      .required(intl.formatMessage({ id: "noPassword" }))
+      .min(8, intl.formatMessage({ id: "invalidPassword" }))
       .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
     newPassword: Yup.string()
-      .required("No password provided.")
-      .min(8, "Password is too short - should be 8 chars minimum.")
+      .required(intl.formatMessage({ id: "noPassword" }))
+      .min(8, intl.formatMessage({ id: "invalidPassword" }))
       .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref("newPassword"), null],
-      "Passwords must match"
+      intl.formatMessage({ id: "noMatchPasswords" })
     ),
   });
 
@@ -127,21 +129,21 @@ const ChangePassword = () => {
             <Form>
               <Grid container spacing={2}>
                 <Grid item xs={12} >
-                  <TextfieldWrapper name="password" label="Password" />
+                  <TextfieldWrapper name="password" label={intl.formatMessage({ id: "password" })} />
                 </Grid>
 
                 <Grid item xs={12} >
-                  <TextfieldWrapper name="newPassword" label="New Password" />
+                  <TextfieldWrapper name="newPassword" label={intl.formatMessage({ id: "newPassword" })} />
                 </Grid>
                 <Grid item xs={12} >
                   <TextfieldWrapper
                     name="confirmPassword"
-                    label="Confirm Password"
+                    label={intl.formatMessage({ id: "confirmPassword" })}
                   />
                 </Grid>
                 <Grid item xs={12} >
                   <Box ml="auto">
-                    <ButtonWrapper>Submit Form</ButtonWrapper>
+                    <ButtonWrapper>{intl.formatMessage({ id: "button.changePassword" })}</ButtonWrapper>
                   </Box>
                 </Grid>
               </Grid>
@@ -160,7 +162,7 @@ const ChangePassword = () => {
               onClick={handleOpen}
               className={classes.deleteAccount}
             >
-              Obrisi Nalog
+              {intl.formatMessage({ id: "deleteAccount" })}
             </Typography>
             <DeleteProfileModal
               open={openDeleteModal}
@@ -176,7 +178,7 @@ const ChangePassword = () => {
               onClick={handleOpen}
               className={classes.deactivateAccount}
             >
-              Deaktiviraj Nalog
+              {intl.formatMessage({ id: "deactivateAccount" })}
             </Typography>
             <DeactivateProfileModal
               open={openDeactivateModal}

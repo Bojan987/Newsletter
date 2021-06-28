@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import { FormControl, NativeSelect, Grid, Fab } from '@material-ui/core'
 import { FormattedMessage } from 'react-intl'
 import { Pagination, PaginationItem } from '@material-ui/lab'
+import Button from '@material-ui/core/Button'
 
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -18,6 +19,27 @@ import Modal from '../../components/Modal'
 
 import { deleteHook } from '../util/delete-hook'
 import { axiosAuth as axios } from '../../util/axios-instance'
+
+import styled from 'styled-components'
+
+const ExitButton = styled(Button)`
+    margin: 0 7px 0 0;
+    background-color: #909090;
+    color: white;
+    &:hover {
+        color: white;
+        background-color: #909090;
+    }
+`
+const SaveButton = styled(Button)`
+    margin: 0 0 0 7px;
+    background-color: #231f20;
+    color: white;
+    &:hover {
+        color: white;
+        background-color: #231f20;
+    }
+`
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -81,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
     fab: {
         display: 'flex',
         justifyContent: 'flex-end',
+        textDecoration: 'none',
     },
     paper: {
         position: 'absolute',
@@ -91,11 +114,16 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
         fontFamily: "'Abel', sans-serif",
     },
+    link: {
+        textDecoration: 'none',
+        color: '#909090',
+        cursor: 'pointer',
+    },
 }))
-
 
 const Categories = () => {
     const classes = useStyles()
+    // eslint-disable-next-line
     const [maxPost, setMaxPosts] = useState(0)
     const [category, setCategory] = useState([])
     const [page, setPage] = useState(1)
@@ -103,39 +131,49 @@ const Categories = () => {
     const [limit, setLimit] = useState(5)
 
     const context = useContext(AppContext)
-    const { ExitButton, SaveButton, getModalStyle } = deleteHook()
+    const { getModalStyle } = deleteHook()
     const [modalStyle] = React.useState(getModalStyle)
 
     useEffect(() => {
+        const fetchCategory = async () => {
+            try {
+                const { data } = await axios.get('/category/getcategorys', {
+                    params: {
+                        page: page,
+                        sort: sortBy,
+                        limit: limit,
+                    },
+                })
+                setCategory(data.categorys)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
         fetchCategory()
     }, [page, limit, sortBy])
 
-    const fetchCategory = async() => {
-        
-        try {
-            const {data} = await axios.get('/category/getcategorys', {
-                params: {
-                    page: page,
-                    sort: sortBy,
-                    limit: limit 
-                }
-            })
-            setCategory(data.categorys)
+    
+
+    useEffect(() => {
+        let componentMounted = true;
+        const maxPosts = async () => {
+            try {
+            const { data } = await axios.get('/category/getcategorys')
+            if(componentMounted) {
+                setMaxPosts(data.categorys)
+              }
             
         } catch (error) {
             console.log(error)
         }
-
-    }
-
-    useEffect(() => {
-        const maxPosts = async() => {
-            const {data} = await axios.get('/category/getcategorys')
-            setMaxPosts(data.categorys)
         }
 
         maxPosts()
-    },[])
+        return () => {
+            componentMounted = false;
+           }
+    }, [])
 
     const handlePaginationChange = (event, value) => {
         setPage(value)
@@ -144,7 +182,6 @@ const Categories = () => {
         setLimit(event.target.value)
     }
 
-   console.log(limit)
     const handleSort = (event) => {
         setSortBy(event.target.value)
     }
@@ -194,7 +231,6 @@ const Categories = () => {
                     <NativeSelect value={limit} onChange={handleChange}>
                         <option value={5}>5</option>
                         <option value={10}>10</option>
-                        
                     </NativeSelect>
                 </FormControl>
 
@@ -218,7 +254,8 @@ const Categories = () => {
             </Box>
 
             <CategoryHeader />
-            {category && category.map((item, i) => <CategoryCard key={i} data={item}/>)}
+            {category &&
+                category.map((item, i) => <CategoryCard key={i} data={item} />)}
 
             <Grid
                 container
@@ -231,7 +268,7 @@ const Categories = () => {
                         color="secondary"
                         variant="outlined"
                         shape="rounded"
-                        count={Math.ceil( 8 / limit)}
+                        count={Math.ceil(8 / limit)}
                         page={page}
                         defaultPage={page}
                         onChange={handlePaginationChange}

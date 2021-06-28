@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Board = ({title, data}) => {
     const classes = useStyles()
+
+    console.log(data)
     return (
         <Draggable>
             <Box className={classes.BoardWrap}>
@@ -58,22 +60,22 @@ const Board = ({title, data}) => {
                                     </ListItem>
                                     <ListItem className={classes.listitemwrap}>
                                         <Typography variant="h5">
-                                            Komentarisanost:
+                                            Citanost:
                                         </Typography>
                                        
                                     </ListItem>
 
                                     <List component="div" disablePadding>
-                                        {data.overview &&
-                                            data.overview.map((child, i) => (
+                                        {data && data.commentability &&
+                                            data.commentability.map((child, i) => (
                                                 <ListItem
                                                     key={i}
                                                     className={classes.nested}
                                                 >
                                                     <Typography variant="h5">
-                                                        {child.name}:
+                                                        {child[0]}:
                                                     </Typography>
-                                                    {child.val}
+                                                    {child[1]}
                                                 </ListItem>
                                             ))}
                                     </List>

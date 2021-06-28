@@ -11,9 +11,10 @@ export const getStats = async (req, res, next) => {
 
 		const postsCount = await Post.countDocuments();
 		const categoriesCount = await Category.countDocuments();
+		const categories = await Category.find();
 
 		// Count posts per category
-		const postsPerCategory = await Post.aggregate([
+		const postsPerCategoryId = await Post.aggregate([
 			{
 				$match: {},
 			},
@@ -22,255 +23,266 @@ export const getStats = async (req, res, next) => {
 			},
 		]);
 
-		// get percentages
-		let percentages = [];
+		const categoryNames = await Category.find().select('name _id');
 
-		postsPerCategory.forEach(el => {
-			let num = Math.round((el.total * 100) / postsCount);
-			percentages.push(`${num}%`);
-		});
+		const postsPerCategory = [];
 
-		// get category names
-		let names = [];
-		const catIDs = postsPerCategory.map(el => el._id);
-
-		for await (let id of catIDs) {
-			const cat = await Category.findById(id);
-			names.push(cat.name);
+		for (let post of postsPerCategoryId) {
+			for (let cat of categoryNames) {
+				if (post._id.toString() === cat._id.toString()) {
+					post.total = `${Math.round((post.total * 100) / postsCount)}%`;
+					const newObj = { ...post, name: cat.name };
+					postsPerCategory.push(newObj);
+				}
+			}
 		}
 
-		// merge arrays
-		let catArray = [];
-
-		percentages.forEach((val, index) => {
-			names.forEach((name, idx) => {
-				if (index === idx) {
-					const newObj = { name, val };
-					catArray.push(newObj);
-				}
-			});
-		});
-
 		CATEGORY_STATS.total = categoriesCount;
-		CATEGORY_STATS.overview = catArray;
-
-		// return res.status(200).json({ CATEGORY_STATS });
+		CATEGORY_STATS.overview = postsPerCategory;
 
 		//* ~~~ COMMENTS ~~~
 
-		let COMMENT_STATS = {};
+		const COMMENT_STATS = {};
+		const totalComments = await Comment.countDocuments();
 
-		const commentsTotal = await Comment.countDocuments();
-
-		const commentsPerCategory = await Post.aggregate([
+		const commentability = await Post.aggregate([
 			{
-				$match: { hasComments: true },
+				$group: {
+					_id: '$category',
+					comments: { $sum: 1 },
+				},
 			},
+
 			{
-				$group: { _id: '$category', total: { $sum: 1 } },
+				$project: {
+					comments: 1,
+					percentage: {
+						$multiply: [{ $divide: [100, totalComments] }, '$comments'],
+					},
+				},
 			},
 		]);
 
-		let commentPercentages = [];
-
-		commentsPerCategory.forEach(el => {
-			let num = Math.round((el.total * 100) / commentsTotal);
-			commentPercentages.push(`${num}%`);
-		});
-
-		// get category names
-		const allCategs = await Category.find().select('name -_id');
-
-		// merge arrays
-		let commentArray = [];
-
-		commentPercentages.forEach((val, index) => {
-			allCategs.forEach((name, idx) => {
-				if (index === idx) {
-					const newObj = { name: name.name, val };
-					commentArray.push(newObj);
+		for (let catInComments of commentability) {
+			for (let cat of categoryNames) {
+				if (catInComments._id.toString() === cat._id.toString()) {
+					catInComments.percentage = `${Math.round(catInComments.percentage)}%`;
+					catInComments.name = cat.name;
 				}
-			});
-		});
+			}
+		}
 
-		COMMENT_STATS.total = commentsTotal;
-		COMMENT_STATS.overview = commentArray;
+		COMMENT_STATS.total = totalComments;
+		COMMENT_STATS.commentability = commentability;
 
-		return res.status(200).json({ CATEGORY_STATS, COMMENT_STATS });
+		// const comments = {};
 
-		// // USER STATS
-
-		// const users = await User.find();
-
-		// const numOfUsers = users.length;
-
-		// const activeUsers = await User.find({ accountStatus: 'active' });
-		// const numOfActive = activeUsers.length;
-
-		// const inactiveUsers = await User.find({ accountStatus: 'inactive' });
-		// const numOfInactive = inactiveUsers.length;
-
-		// const blockedUsers = await User.find({ accountStatus: 'blocked' });
-		// const numOfBlocked = blockedUsers.length;
-
-		// const dnevno = [];
-		// const mesecno = [];
-		// const godisnje = [];
-
-		// let brojacUsera = 0;
-		// for (let i = 0; i < users.length; i++) {
-		// 	if (users[i].createdAt) {
-		// 		if (users[i].createdAt.getDate() == new Date().getDate()) {
-		// 			dnevno.push(users[i]);
-		// 		}
-
-		// 		// DSKPOAKDOPSAKD
-
-		// 		if (new Date().getDate > 7) {
-		// 			if (
-		// 				users[i].createdAt.getDate() > new Date().getDate() - 7 &&
-		// 				users[i].createdAt.getMonth() == new Date().getMonth() &&
-		// 				users[i].createdAt.getYear() == new Date().getYear()
-		// 			) {
-		// 				brojacUsera++;
-		// 			}
-		// 		} else if (
-		// 			users[i].createdAt.getMonth() == new Date().getMonth() &&
-		// 			users[i].createdAt.getYear() == new Date().getYear()
-		// 		) {
-		// 			brojacUsera++;
-		// 		}
-
-		// 		// DASKJDASLDJADS
-
-		// 		if (users[i].createdAt.getYear() == new Date().getYear()) {
-		// 			godisnje.push(users[i]);
-		// 		}
-		// 		if (users[i].createdAt.getMonth() == new Date().getMonth()) {
-		// 			mesecno.push(users[i]);
-		// 		}
-		// 	}
-		// }
-
-		// const Users = {
-		// 	Sum: numOfUsers,
-		// 	Active: numOfActive,
-		// 	Inactive: numOfInactive,
-		// 	Blocked: numOfBlocked,
-		// 	today: dnevno.length,
-		// 	thisWeek: brojacUsera,
-		// 	thisMonth: mesecno.length,
-		// 	thisYear: godisnje.length,
-		// };
-
-		// // POST STATS
-
-		// const categories = await Category.find();
-		// var byCategories = {};
-
-		// for (let i = 0; i < categories.length; i++) {
-		// 	const name = categories[i].name;
-		// 	const brojPoKategoriji = await Post.countDocuments({
-		// 		category: categories[i]._id,
-		// 	});
-		// 	byCategories[categories[i].name] = brojPoKategoriji;
-		// }
-
-		// var byCateg = Object.keys(byCategories).map(function (key) {
-		// 	return [String(key), byCategories[key]];
-		// });
-
-		// let brojacDanasnjih = 0;
-		// let brojacNedeljnih = 0;
-		// let brojacMesecnih = 0;
-		// let brojacGodisnjih = 0;
-		// for (let i = 0; i < posts.length; i++) {
-		// 	if (
-		// 		posts[i].createdAt.getDate() == new Date().getDate() &&
-		// 		posts[i].createdAt.getMonth() == new Date().getMonth() &&
-		// 		posts[i].createdAt.getYear() == new Date().getYear()
-		// 	) {
-		// 		brojacDanasnjih++;
-		// 	}
-
-		// 	if (new Date().getDate > 7) {
-		// 		if (
-		// 			posts[i].createdAt.getDate() > new Date().getDate() - 7 &&
-		// 			posts[i].createdAt.getMonth() == new Date().getMonth() &&
-		// 			posts[i].createdAt.getYear() == new Date().getYear()
-		// 		) {
-		// 			brojacNedeljnih++;
-		// 		}
-		// 	} else if (
-		// 		posts[i].createdAt.getMonth() == new Date().getMonth() &&
-		// 		posts[i].createdAt.getYear() == new Date().getYear()
-		// 	) {
-		// 		brojacNedeljnih++;
-		// 	}
-
-		// 	if (
-		// 		posts[i].createdAt.getMonth() == new Date().getMonth() &&
-		// 		posts[i].createdAt.getYear() == new Date().getYear()
-		// 	) {
-		// 		brojacMesecnih++;
-		// 	}
-
-		// 	if (posts[i].createdAt.getYear() == new Date().getYear()) {
-		// 		brojacGodisnjih++;
-		// 	}
-		// }
-
-		// const Posts = {
-		// 	Sum: allPosts,
-		// 	byCateg,
-		// 	today: brojacDanasnjih,
-		// 	thisWeek: brojacNedeljnih,
-		// 	thisMonth: brojacMesecnih,
-		// 	thisYear: brojacGodisnjih,
-		// };
-
-		// // COMMENT STATS
-
-		// const allComents = await Comment.countDocuments();
-		// //const categories = await Category.find();
-
-		// var Commentability = {};
-
-		// for (let i = 0; i < categories.length; i++) {
+		// for (let cat of categories) {
 		// 	const sumComment = 0;
-		// 	const posts = await Post.find({ category: categories[i]._id });
-		// 	for (let j = 0; j < posts.length; j++) {
+
+		// 	const posts = await Post.find({ category: cat._id });
+
+		// 	for await (let post of posts) {
 		// 		const numOfCommentsForPost = await Comment.countDocuments({
-		// 			postRelated: posts[j]._id,
+		// 			postRelated: post._id,
 		// 		});
 		// 		sumComment += numOfCommentsForPost;
 		// 	}
-		// 	const procenat = Math.floor((sumComment / allComents) * 100);
+		// 	const percentage = `${Math.floor((sumComment / totalComments) * 100)}%`;
 
-		// 	Commentability[categories[i].name] = procenat;
+		// 	comments[cat.name] = percentage;
 		// }
 
-		// var commentability = Object.keys(Commentability).map(function (key) {
-		// 	return [String(key), Commentability[key]];
+		// const commentability = Object.keys(comments).map(function (key) {
+		// 	return [String(key), comments[key]];
 		// });
+		// console.timeEnd('test');
 
-		// const Comments = {
-		// 	Sum: allComents,
-		// 	commentability,
-		// };
+		//*   ~~~ USER STATS ~~~
 
-		// // UPIS
+		const users = await User.find();
+		const numOfUsers = users.length;
 
-		// const sve = {
-		// 	Categories,
-		// 	Users,
-		// 	Posts,
-		// 	Comments,
-		// };
+		const status = await User.aggregate([
+			{
+				$group: { _id: '$accountStatus', count: { $sum: 1 } },
+			},
+			{
+				$project: {
+					status: '$_id',
+					count: 1,
+					_id: 0,
+				},
+			},
+		]);
 
-		// const json = JSON.stringify(sve);
+		const dnevno = [];
+		const mesecno = [];
+		const godisnje = [];
+
+		let brojacUsera = 0;
+
+		const dateToday = new Date().getDate();
+		const month = new Date().getMonth();
+		const year = new Date().getFullYear();
+		const startOfYear = new Date(year, 0, 1, 1).toISOString();
+		const endOfYear = new Date(year, 11, 32).toISOString();
+		// const dateToday = new Date().getDate();
+		// const month = new Date().getMonth();
+		// const year = new Date().getFullYear();
+		// const startOfYear = new Date(year, 0, 1);
+		// const endOfYear = new Date(year, 11, 31);
+
+		const testing = await User.aggregate([
+			{
+				$match: { createdAt: { $lte: endOfYear } },
+			},
+		]);
+		// const testing = await User.aggregate([
+		// 	{
+		// 		$project: {
+		// 			date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+		// 		},
+		// 	},
+		// 	{
+		// 		$group: {
+		// 			_id: {
+		// 				year: { $year: '$date' },
+		// 				month: { $month: '$date' },
+		// 				week: { $week: '$date' },
+		// 				day: { $dayOfMonth: '$date' },
+		// 			},
+		// 			count: { $sum: 1 },
+		// 		},
+		// 	},
+		// ]);
+		console.log(testing);
+
+		for (let user of users) {
+			if (user.createdAt) {
+				if (user.createdAt.getDate() == dateToday) {
+					dnevno.push(user);
+				}
+
+				if (new Date().getDate > 7) {
+					if (
+						user.createdAt.getDate() > dateToday - 7 &&
+						user.createdAt.getMonth() == month &&
+						user.createdAt.getFullYear() == year
+					) {
+						brojacUsera++;
+					}
+				} else if (
+					user.createdAt.getMonth() == month &&
+					user.createdAt.getFullYear() == year
+				) {
+					brojacUsera++;
+				}
+
+				if (user.createdAt.getFullYear() == year) {
+					godisnje.push(user);
+				}
+				if (user.createdAt.getMonth() == month) {
+					mesecno.push(user);
+				}
+			}
+		}
+
+		const USER_STATS = {
+			total: numOfUsers,
+			status,
+			registered: {
+				today: dnevno.length,
+				thisWeek: brojacUsera,
+				thisMonth: mesecno.length,
+				thisYear: godisnje.length,
+			},
+		};
+
+		//*   ~~~ POST STATS ~~~
+
+		const byCategories = {};
+		const posts = await Post.find();
+
+		for await (let cat of categories) {
+			const brojPoKategoriji = await Post.countDocuments({
+				category: cat._id,
+			});
+			byCategories[cat.name] = brojPoKategoriji;
+		}
+
+		const byCateg = Object.keys(byCategories).map(function (key) {
+			return [String(key), byCategories[key]];
+		});
+
+		let brojacDanasnjih = 0;
+		let brojacNedeljnih = 0;
+		let brojacMesecnih = 0;
+		let brojacGodisnjih = 0;
+
+		for (let i = 0; i < posts.length; i++) {
+			if (
+				posts[i].createdAt.getDate() == dateToday &&
+				posts[i].createdAt.getMonth() == month &&
+				posts[i].createdAt.getFullYear() == year
+			) {
+				brojacDanasnjih++;
+			}
+
+			if (new Date().getDate > 7) {
+				if (
+					posts[i].createdAt.getDate() > dateToday - 7 &&
+					posts[i].createdAt.getMonth() == month &&
+					posts[i].createdAt.getFullYear() == year
+				) {
+					brojacNedeljnih++;
+				}
+			} else if (
+				posts[i].createdAt.getMonth() == month &&
+				posts[i].createdAt.getFullYear() == year
+			) {
+				brojacNedeljnih++;
+			}
+
+			if (
+				posts[i].createdAt.getMonth() == month &&
+				posts[i].createdAt.getFullYear() == year
+			) {
+				brojacMesecnih++;
+			}
+
+			if (posts[i].createdAt.getFullYear() == year) {
+				brojacGodisnjih++;
+			}
+		}
+
+		const POST_STATS = {
+			total: posts.length,
+			overview: {
+				byCateg,
+			},
+			published: {
+				today: brojacDanasnjih,
+				thisWeek: brojacNedeljnih,
+				thisMonth: brojacMesecnih,
+				thisYear: brojacGodisnjih,
+			},
+		};
+
+		// const json = JSON.stringify({
+		// 	POST_STATS,
+		// 	// COMMENT_STATS,
+		// 	CATEGORY_STATS,
+		// 	USER_STATS,
+		// });
 		// await fs.writeFileSync('stats.json', json);
-		// return res.status(201).json(sve);
+
+		return res.status(200).json({
+			CATEGORY_STATS,
+			COMMENT_STATS,
+			USER_STATS,
+			POST_STATS,
+		});
 	} catch (err) {
 		next(err);
 	}
