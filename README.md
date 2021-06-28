@@ -27,6 +27,7 @@ Unregistered user :
 - View Journalist profile
 - Contact us
 - View About Us page
+- Multi language possibility (ENG / SRB)
 
 Registered user :
 (in addition to unregisted user)
