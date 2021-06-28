@@ -154,7 +154,10 @@ const CategoryList = ({ isMobile, handleDrawer, isFooter }) => {
                                 className={link}
                                 onClick={handleDrawer}
                             >
-                                {el.name}
+                                <FormattedMessage
+                                    id={el.name}
+                                    default="default text"
+                                ></FormattedMessage>
                             </Link>
                         </li>
                     ))}

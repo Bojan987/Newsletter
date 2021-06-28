@@ -7,13 +7,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { Grid } from '@material-ui/core'
 import { Link } from '@material-ui/core'
-import { useTheme } from '@material-ui/core'
-import { useMediaQuery } from '@material-ui/core'
+// import { useTheme } from '@material-ui/core'
+// import { useMediaQuery } from '@material-ui/core'
 import Avatar from '@material-ui/core/Avatar'
 import { Link as RouterLink } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     small: {
         fontSize: '3rem',
     },
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileCard = ({ size, publicProfile, data }) => {
     const classes = useStyles()
-    const theme = useTheme()
+    // const theme = useTheme()
     // const matches = useMediaQuery(theme.breakpoints.down('sm'))
     const [links, setLinks] = useState({
         facebook: 'http://facebook.com',

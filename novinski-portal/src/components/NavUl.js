@@ -70,7 +70,7 @@ const NavUl = ({ isMobile, handleDrawer }) => {
                         />
                     </Link>
                 </li>
-                <li className={li}>
+                {/* <li className={li}>
                     <Link
                         to="/category"
                         className={link}
@@ -117,7 +117,7 @@ const NavUl = ({ isMobile, handleDrawer }) => {
                             default="default text"
                         />
                     </Link>
-                </li>
+                </li> */}
             </ul>
         </div>
     )
