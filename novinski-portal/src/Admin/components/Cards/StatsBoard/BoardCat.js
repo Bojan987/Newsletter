@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Board = ({title, data}) => {
     const classes = useStyles()
 
-    console.log(data)
+   
     return (
         <Draggable>
             <Box className={classes.BoardWrap}>
@@ -75,7 +75,7 @@ const Board = ({title, data}) => {
                                                     <Typography variant="h5">
                                                         {child.name}:
                                                     </Typography>
-                                                    {child.val}
+                                                    {child.total}
                                                 </ListItem>
                                             ))}
                                     </List>

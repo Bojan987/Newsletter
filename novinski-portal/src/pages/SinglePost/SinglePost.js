@@ -10,7 +10,7 @@ import { Typography } from '@material-ui/core'
 import SingleComment from '../../components/Comments/SingleComment'
 import ProfileCard from '../../components/Cards/ProfileCard'
 import { axiosAuth as axios } from '../../util/axios-instance'
-//import SocialLinks from '../../components/SocialLinks'
+import { FormattedMessage } from 'react-intl'
 
 const Root = styled.div`
     margin: auto;
@@ -82,7 +82,6 @@ const SinglePost = () => {
             setErrorState(error.response.data.error)
         }
     }
-    
 
     return (
         <Root>
@@ -107,7 +106,7 @@ const SinglePost = () => {
                     />
                 </div>
                 <p className="single-post-tags">
-                    TAGS:{' '}
+                    <FormattedMessage id="tags" default="default text" />:{' '}
                     <b>
                         {singlePost.tags
                             ? singlePost.tags
@@ -141,22 +140,37 @@ const SinglePost = () => {
                     </div>
                 </div> */}
                 {author && (
-                    <ProfileCard size="big" data={author} avatar={'avatar'} publicProfile={true}/>
+                    <ProfileCard
+                        size="big"
+                        data={author}
+                        avatar={'avatar'}
+                        publicProfile={true}
+                    />
                 )}
             </div>
             <div className="bookmarks">
-                <p>Sačuvaj post:</p>
+                <p>
+                    <FormattedMessage id="save.post" default="default text" />:
+                </p>
                 <p className="save-link" onClick={() => savePost(id)}>
-                    Sačuvaj
+                    <FormattedMessage id="save" default="default text" />
                 </p>
                 {errorState.length > 0 &&
                 errorState === 'Not authenticated.' ? (
                     <p style={{ color: 'red' }}>
-                        Morate biti ulogovani da biste sačuvali post!
+                        <FormattedMessage
+                            id="post.warning"
+                            default="default text"
+                        />
                     </p>
                 ) : errorState.length > 0 &&
                   errorState === 'You already bookmarked that post' ? (
-                    <p style={{ color: 'red' }}>Već ste sačuvali ovaj post!</p>
+                    <p style={{ color: 'red' }}>
+                        <FormattedMessage
+                            id="save.post.warning"
+                            default="default text"
+                        />
+                    </p>
                 ) : null}
             </div>
             <div className="comments-form">
@@ -165,7 +179,7 @@ const SinglePost = () => {
                     align="left"
                     className={classes.formTypography}
                 >
-                    OBJAVI KOMENTAR
+                    <FormattedMessage id="add.comment" default="default text" />
                 </Typography>
                 <CommentsForm id={id} />
             </div>
@@ -175,7 +189,7 @@ const SinglePost = () => {
                     align="left"
                     className={classes.formTypography}
                 >
-                    KOMENTARI
+                    <FormattedMessage id="comments" default="default text" />
                 </Typography>
                 {comments.length > 0 ? (
                     comments.map((comment) => {
@@ -208,7 +222,12 @@ const SinglePost = () => {
                     })
                 ) : (
                     <p style={{ fontFamily: 'Abel' }}>
-                        <em>Još uvek nema komentara</em>
+                        <em>
+                            <FormattedMessage
+                                id="no.comments"
+                                default="default text"
+                            />
+                        </em>
                     </p>
                 )}
             </div>

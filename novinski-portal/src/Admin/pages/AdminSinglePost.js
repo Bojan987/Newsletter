@@ -11,6 +11,7 @@ import Modal from '../../components/Modal'
 import SocialLinks from '../../components/SocialLinks'
 import { deleteHook } from '../util/delete-hook'
 import { makeStyles } from '@material-ui/core/styles'
+import { FormattedMessage } from 'react-intl'
 
 const Left = styled.div`
     flex: 70%;
@@ -197,10 +198,24 @@ const SinglePost = () => {
                                         <SocialLinks />
                                     </div>
                                 </div>
-                                <div className="author-role">{role}</div>
+                                <div className="author-role">
+                                    {role ? (
+                                        <FormattedMessage
+                                            id={role}
+                                            default="default text"
+                                        />
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
                             </div>
                             <Link to={`/single-post/${id}`}>
-                                <Button>POGLEDAJ NA SAJTU</Button>
+                                <Button>
+                                    <FormattedMessage
+                                        id="read.post"
+                                        default="default text"
+                                    />
+                                </Button>
                             </Link>
                         </div>
                         <div>
@@ -219,11 +234,32 @@ const SinglePost = () => {
                     <Right>
                         <div className="right-first-div">
                             <div className="display-flex">
-                                <p>Kategorija: </p>
-                                <p className="category-field">{postCategory}</p>
+                                <p>
+                                    <FormattedMessage
+                                        id="admin.posts.category"
+                                        default="default text"
+                                    />
+                                    :{' '}
+                                </p>
+                                <p className="category-field">
+                                    {postCategory ? (
+                                        <FormattedMessage
+                                            id={postCategory}
+                                            default="default text"
+                                        />
+                                    ) : (
+                                        ''
+                                    )}
+                                </p>
                             </div>
                             <div className="display-flex">
-                                <p>Tagovi: &nbsp;&nbsp;</p>
+                                <p>
+                                    <FormattedMessage
+                                        id="admin.posts.tags"
+                                        default="default text"
+                                    />
+                                    : &nbsp;&nbsp;
+                                </p>
                                 <p>
                                     {singlePost.tags
                                         ? singlePost.tags
@@ -237,7 +273,13 @@ const SinglePost = () => {
                                 </p>
                             </div>
                             <div className="display-flex">
-                                <p>Komentari: </p>
+                                <p>
+                                    <FormattedMessage
+                                        id="admin.posts.comments"
+                                        default="default text"
+                                    />
+                                    :{' '}
+                                </p>
                                 <p className="comment-field">{numOfComm}</p>
                             </div>
                         </div>
@@ -284,14 +326,20 @@ const SinglePost = () => {
                         <div className="right-buttons">
                             <Link to={`/edit-post/${id}`}>
                                 <EditButton variant="outlined">
-                                    Izmeni
+                                    <FormattedMessage
+                                        id="edit"
+                                        default="default text"
+                                    />
                                 </EditButton>
                             </Link>
                             <DeleteButton
                                 variant="outlined"
                                 onClick={() => openDeleteModal(id)}
                             >
-                                Obriši
+                                <FormattedMessage
+                                    id="admin.users.modal.confirm"
+                                    default="default text"
+                                />
                             </DeleteButton>
                         </div>
                     </Right>

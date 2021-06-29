@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { axiosAuth as axios } from '../../util/axios-instance'
 import AddReply from './AddReply'
+import { FormattedMessage } from 'react-intl'
 
 const AvatarIcon = styled(AccountCircleOutlined)`
     font-size: 50px;
@@ -104,13 +105,19 @@ const SingleComment = ({ id, firstName, lastName, content, replies }) => {
                     className={classes.replyButton}
                     onClick={() => setReplyState(!replyState)}
                 >
-                    Odgovori
+                    <FormattedMessage id="reply" default="default text" />
                 </p>
                 <Rate onClick={() => likeComment(id)}>
-                    <UpIcon /> <p>Podržavam</p>
+                    <UpIcon />{' '}
+                    <p>
+                        <FormattedMessage id="like" default="default text" />
+                    </p>
                 </Rate>
                 <Rate onClick={() => dislikeComment(id)}>
-                    <DownIcon /> Ne podržavam
+                    <DownIcon />{' '}
+                    <p>
+                        <FormattedMessage id="dislike" default="default text" />
+                    </p>
                 </Rate>
             </Ratings>
             <div className={classes.replyForm}>

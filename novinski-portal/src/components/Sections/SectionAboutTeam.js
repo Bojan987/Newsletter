@@ -3,6 +3,7 @@ import AboutCard from '../Cards/AboutCard'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 //import { Link } from 'react-router-dom'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles({
     root: {
@@ -39,7 +40,16 @@ const SectionAboutTeam = ({ team }) => {
                         {/* <Link to={``} style={{textDecoration: 'none'}}> */}
                         <AboutCard
                             name={`${user.firstName} ${user.lastName}`}
-                            role={user.position}
+                            role={
+                                user.role ? (
+                                    <FormattedMessage
+                                        id={user.role}
+                                        default="default text"
+                                    />
+                                ) : (
+                                    ''
+                                )
+                            }
                             description={user.description}
                         />
                         {/* </Link> */}

@@ -13,6 +13,7 @@ import Loader from '../../components/Loader'
 import { deleteHook } from '../../util/delete-hook'
 import AppContext from '../../../context/AppContext'
 import { makeStyles } from '@material-ui/core/styles'
+import { FormattedMessage } from 'react-intl'
 
 const AvatarIcon = styled(AccountCircleOutlinedIcon)`
     font-size: 70px;
@@ -203,17 +204,43 @@ const SingleCategory = () => {
                             </div>
                             <div className="author-info">
                                 <h1>{author.firstName}</h1>
-                                <h3>{author.role}</h3>
+                                <h3>
+                                    {author.role ? (
+                                        <FormattedMessage
+                                            id={author.role}
+                                            default="default text"
+                                        />
+                                    ) : (
+                                        ''
+                                    )}
+                                    {/* <FormattedMessage
+                                        id={`${author.role}`}
+                                        default="default text"
+                                    /> */}
+                                    {/* {author.role} */}
+                                </h3>
                             </div>
                         </div>
                         <div className="single-category-content">
-                            <h1>{singleCategory.name}</h1>
+                            <h1>
+                                {singleCategory.name ? (
+                                    <FormattedMessage
+                                        id={singleCategory.name}
+                                        default="default text"
+                                    />
+                                ) : (
+                                    ''
+                                )}
+                            </h1>
                             <p>{singleCategory.description}</p>
                         </div>
                         <div>
                             <div className="sp-buttons">
                                 <HomeButton home={home ? 1 : 0}>
-                                    POCETNA STRANICA
+                                    <FormattedMessage
+                                        id="uppercase.home"
+                                        default="default text"
+                                    />
                                 </HomeButton>
                                 {/* <Divider orientation="vertical" /> */}
                                 {home ? (
@@ -235,7 +262,12 @@ const SingleCategory = () => {
                     </div>
                     {sidebar ? (
                         <div className="sc-right">
-                            <h1 className="sc-right-title">Poslednje objave</h1>
+                            <h1 className="sc-right-title">
+                                <FormattedMessage
+                                    id="posts"
+                                    default="default text"
+                                />
+                            </h1>
                             {posts
                                 .map((post) => {
                                     return (
@@ -251,7 +283,13 @@ const SingleCategory = () => {
                                 .slice(0, 4)}
                             <Link to="/posts" className="sc-right-link">
                                 <span className="sc-right-button">
-                                    <p>Pogledaj sve</p> <ArrowForwardIosIcon />
+                                    <p>
+                                        <FormattedMessage
+                                            id="button.loadmore"
+                                            default="default text"
+                                        />
+                                    </p>{' '}
+                                    <ArrowForwardIosIcon />
                                 </span>
                             </Link>
                         </div>
@@ -262,7 +300,9 @@ const SingleCategory = () => {
             )}
             <div className="sc-buttons">
                 <Link to="/edit-category">
-                    <EditButton variant="outlined">Izmeni</EditButton>
+                    <EditButton variant="outlined">
+                        <FormattedMessage id="edit" default="default text" />
+                    </EditButton>
                 </Link>
                 <DeleteButton
                     onClick={() => {
@@ -272,7 +312,10 @@ const SingleCategory = () => {
                     }}
                     variant="outlined"
                 >
-                    Obrisi
+                    <FormattedMessage
+                        id="admin.users.modal.confirm"
+                        default="default text"
+                    />
                 </DeleteButton>
             </div>
             <Modal

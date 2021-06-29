@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import ButtonWrapper from '../../../components/FormsUI/Button/ButtonWrapper'
 import * as Yup from 'yup'
 import { axiosAuth as axios } from '../../../util/axios-instance'
+import { FormattedMessage } from 'react-intl'
 
 const ExitButton = styled(Button)`
     margin: 0 7px;
@@ -106,7 +107,10 @@ const CreateCategory = () => {
                                     variant="h2"
                                     className={classes.titleColor}
                                 >
-                                    Dodavanje nove kategorije
+                                    <FormattedMessage
+                                        id="admin.categories.add"
+                                        default="default text"
+                                    />
                                 </Typography>
                                 <Grid container spacing={2} direction="column">
                                     <Grid item xs={12} sm={7}>
@@ -116,7 +120,11 @@ const CreateCategory = () => {
                                                     variant="h5"
                                                     className={classes.ccTitle}
                                                 >
-                                                    Naziv:
+                                                    <FormattedMessage
+                                                        id="admin.posts.name"
+                                                        default="default text"
+                                                    />
+                                                    :
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={10}>
@@ -132,7 +140,11 @@ const CreateCategory = () => {
                                                     variant="h5"
                                                     className={classes.ccTitle}
                                                 >
-                                                    Opis:
+                                                    <FormattedMessage
+                                                        id="description"
+                                                        default="default text"
+                                                    />
+                                                    :
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={10}>
@@ -191,8 +203,11 @@ const CreateCategory = () => {
                                                                         classes.titleColor
                                                                     }
                                                                 >
-                                                                    Pocetna
-                                                                    stranica:
+                                                                    <FormattedMessage
+                                                                        id="admin.categories.home"
+                                                                        default="default text"
+                                                                    />
+                                                                    :
                                                                 </Typography>
                                                             </Grid>
                                                             <Grid
@@ -226,7 +241,11 @@ const CreateCategory = () => {
                                                                         classes.titleColor
                                                                     }
                                                                 >
-                                                                    Redosled:
+                                                                    <FormattedMessage
+                                                                        id="admin.categories.homeOrder"
+                                                                        default="default text"
+                                                                    />
+                                                                    :
                                                                 </Typography>
                                                             </Grid>
                                                             <Grid
@@ -302,7 +321,11 @@ const CreateCategory = () => {
                                                                         classes.titleColor
                                                                     }
                                                                 >
-                                                                    Tip:
+                                                                    <FormattedMessage
+                                                                        id="admin.categories.type"
+                                                                        default="default text"
+                                                                    />
+                                                                    :
                                                                 </Typography>
                                                             </Grid>
                                                             <Grid
@@ -334,7 +357,10 @@ const CreateCategory = () => {
                                             <Grid item>
                                                 <Link to="/categories">
                                                     <ExitButton variant="outlined">
-                                                        Odustani
+                                                        <FormattedMessage
+                                                            id="admin.users.modal.cancel"
+                                                            default="default text"
+                                                        />
                                                     </ExitButton>
                                                 </Link>
                                             </Grid>
@@ -347,7 +373,10 @@ const CreateCategory = () => {
                                                         boxShadow: 'none',
                                                     }}
                                                 >
-                                                    Sacuvaj
+                                                    <FormattedMessage
+                                                        id="button.save"
+                                                        default="default text"
+                                                    />
                                                 </ButtonWrapper>
                                             </Grid>
                                         </Grid>

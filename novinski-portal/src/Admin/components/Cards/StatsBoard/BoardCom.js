@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Board = ({title, data}) => {
     const classes = useStyles()
 
-    console.log(data)
+    
     return (
         <Draggable>
             <Box className={classes.BoardWrap}>
@@ -73,9 +73,9 @@ const Board = ({title, data}) => {
                                                     className={classes.nested}
                                                 >
                                                     <Typography variant="h5">
-                                                        {child[0]}:
+                                                        {child.name}:
                                                     </Typography>
-                                                    {child[1]}
+                                                    {child.percentage}
                                                 </ListItem>
                                             ))}
                                     </List>

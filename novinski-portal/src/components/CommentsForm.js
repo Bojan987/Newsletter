@@ -6,6 +6,7 @@ import TextfieldWrapper from './FormsUI/Textfield/TextfieldWrapper'
 import { makeStyles } from '@material-ui/core/styles'
 import CheckboxWrapper from './FormsUI/Checkbox/CheckboxWrapper'
 import ButtonWrapper from './FormsUI/Button/ButtonWrapper'
+import { FormattedMessage } from 'react-intl'
 
 import { axiosAuth as axios } from '../util/axios-instance'
 
@@ -71,30 +72,55 @@ export const CommentsForm = ({ id }) => {
                             <TextfieldWrapper
                                 className={classes.nameInput}
                                 name="firstName"
-                                label="Ime"
+                                label={
+                                    <FormattedMessage
+                                        id="firstName"
+                                        default="default text"
+                                    />
+                                }
                                 margin="normal"
                                 style={{ paddingRight: '10px' }}
                             />
 
                             <TextfieldWrapper
                                 name="email"
-                                label="Email adresa"
+                                label={
+                                    <FormattedMessage
+                                        id="email"
+                                        default="default text"
+                                    />
+                                }
                                 margin="normal"
                                 style={{ paddingLeft: '10px' }}
                             />
                         </div>
                         <TextfieldWrapper
                             name="content"
-                            label="Komentar"
+                            label={
+                                <FormattedMessage
+                                    id="comment"
+                                    default="default text"
+                                />
+                            }
                             rows="12"
                             multiline={true}
                             margin="normal"
                         />
                         <CheckboxWrapper
                             name="notifyAuthor"
-                            label="Obavesti me o odgovorima na komentar"
+                            label={
+                                <FormattedMessage
+                                    id="notification"
+                                    default="default text"
+                                />
+                            }
                         />
-                        <ButtonWrapper>OBJAVI</ButtonWrapper>
+                        <ButtonWrapper>
+                            <FormattedMessage
+                                id="admin.post.publish"
+                                default="default text"
+                            />
+                        </ButtonWrapper>
                     </Form>
                 </Formik>
             </div>

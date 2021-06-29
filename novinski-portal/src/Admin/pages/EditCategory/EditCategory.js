@@ -13,6 +13,7 @@ import * as Yup from 'yup'
 import { axiosAuth as axios } from '../../../util/axios-instance'
 import { useParams } from 'react-router-dom'
 import Loader from '../../components/Loader'
+import { FormattedMessage } from 'react-intl'
 
 const ExitButton = styled(Button)`
     margin: 0 7px;
@@ -180,8 +181,11 @@ const EditCategory = () => {
                                                                                 classes.titleColor
                                                                             }
                                                                         >
-                                                                            Pocetna
-                                                                            stranica:
+                                                                            <FormattedMessage
+                                                                                id="admin.categories.home"
+                                                                                default="default text"
+                                                                            />
+                                                                            :
                                                                         </Typography>
                                                                     </Grid>
                                                                     <Grid
@@ -227,7 +231,11 @@ const EditCategory = () => {
                                                                                 classes.titleColor
                                                                             }
                                                                         >
-                                                                            Redosled:
+                                                                            <FormattedMessage
+                                                                                id="admin.categories.homeOrder"
+                                                                                default="default text"
+                                                                            />
+                                                                            :
                                                                         </Typography>
                                                                     </Grid>
                                                                     <Grid
@@ -359,7 +367,11 @@ const EditCategory = () => {
                                                                                 classes.titleColor
                                                                             }
                                                                         >
-                                                                            Tip:
+                                                                            <FormattedMessage
+                                                                                id="admin.categories.type"
+                                                                                default="default text"
+                                                                            />
+                                                                            :
                                                                         </Typography>
                                                                     </Grid>
                                                                     <Grid
@@ -390,7 +402,10 @@ const EditCategory = () => {
                                                     <Grid item>
                                                         <Link to="/categories">
                                                             <ExitButton variant="outlined">
-                                                                Odustani
+                                                                <FormattedMessage
+                                                                    id="admin.users.modal.cancel"
+                                                                    default="default text"
+                                                                />
                                                             </ExitButton>
                                                         </Link>
                                                     </Grid>
@@ -402,7 +417,10 @@ const EditCategory = () => {
                                                                     '6px',
                                                             }}
                                                         >
-                                                            Izmeni
+                                                            <FormattedMessage
+                                                                id="edit"
+                                                                default="default text"
+                                                            />
                                                         </ButtonWrapper>
                                                     </Grid>
                                                 </Grid>

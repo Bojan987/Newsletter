@@ -15,6 +15,7 @@ import TextfieldWrapper from '../../components/FormsUI/Textfield/TextfieldWrappe
 import SelectWrapper from '../../components/FormsUI/Select/SelectWrapper'
 import Loader from '../components/Loader'
 import Alert from '../components/Alert'
+import { FormattedMessage } from 'react-intl'
 
 const Left = styled.div`
     flex: 70%;
@@ -189,7 +190,13 @@ const CreatePost = () => {
                                             className="display-flex"
                                             style={{ alignItems: 'center' }}
                                         >
-                                            <p>Kategorija: </p>
+                                            <p>
+                                                <FormattedMessage
+                                                    id="admin.posts.category"
+                                                    default="default text"
+                                                />
+                                                :{' '}
+                                            </p>
                                             <FormControl
                                                 className={classes.formControl}
                                                 style={{ width: '100%' }}
@@ -212,7 +219,13 @@ const CreatePost = () => {
                                             className="display-flex"
                                             style={{ alignItems: 'center' }}
                                         >
-                                            <p>Tagovi:</p>
+                                            <p>
+                                                <FormattedMessage
+                                                    id="admin.posts.tags"
+                                                    default="default text"
+                                                />
+                                                :
+                                            </p>
                                             <TextfieldWrapper
                                                 name="tags"
                                                 variant="outlined"
@@ -317,15 +330,6 @@ const CreatePost = () => {
                                                 />
                                             )}
                                         </div>
-                                        {/* <input
-                                            onChange={handleSelectFile}
-                                            type="file"
-                                            accept="image/*"
-                                        />
-                                        <button onClick={handleSubmit}>
-                                            Upload
-                                        </button> */}
-
                                         <label htmlFor="upload-photo">
                                             <input
                                                 style={{ display: 'none' }}
@@ -335,7 +339,6 @@ const CreatePost = () => {
                                                 accept="image/*"
                                                 onChange={uploadImage}
                                             />
-
                                             <Button
                                                 style={{
                                                     width: 'unset',
@@ -347,18 +350,27 @@ const CreatePost = () => {
                                                 }}
                                                 component="span"
                                             >
-                                                Upload
+                                                <FormattedMessage
+                                                    id="button.upload"
+                                                    default="default text"
+                                                />
                                             </Button>
                                         </label>
 
                                         <p>
-                                            Preporucena velicina: 1280px x 720px
+                                            <FormattedMessage
+                                                id="image.size.recommendation"
+                                                default="default text"
+                                            />
                                         </p>
                                     </div>
                                     <div className="right-buttons">
                                         <Link to="/posts">
                                             <ExitButton variant="outlined">
-                                                Odustani
+                                                <FormattedMessage
+                                                    id="admin.users.modal.cancel"
+                                                    default="default text"
+                                                />
                                             </ExitButton>
                                         </Link>
                                         <ButtonWrapper
@@ -371,7 +383,10 @@ const CreatePost = () => {
                                                 color: 'white',
                                             }}
                                         >
-                                            Objavi
+                                            <FormattedMessage
+                                                id="admin.post.publish"
+                                                default="default text"
+                                            />
                                         </ButtonWrapper>
                                     </div>
                                 </Right>

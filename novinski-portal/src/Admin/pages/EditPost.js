@@ -16,6 +16,7 @@ import TextfieldWrapper from '../../components/FormsUI/Textfield/TextfieldWrappe
 import SelectWrapper from '../../components/FormsUI/Select/SelectWrapper'
 import Loader from '../components/Loader'
 import DeleteIcon from '@material-ui/icons/Delete'
+import { FormattedMessage } from 'react-intl'
 
 const Left = styled.div`
     flex: 70%;
@@ -217,7 +218,10 @@ const EditPost = () => {
                                                     }}
                                                 >
                                                     <p className="label">
-                                                        Autor:
+                                                        <FormattedMessage
+                                                            id="admin.posts.author"
+                                                            default="default text"
+                                                        />
                                                     </p>
                                                     <FormControl
                                                         className={
@@ -240,7 +244,10 @@ const EditPost = () => {
                                                 </div>
                                                 <Link to={`/single-post/${id}`}>
                                                     <Button>
-                                                        POGLEDAJ NA SAJTU
+                                                        <FormattedMessage
+                                                            id="read.post"
+                                                            default="default text"
+                                                        />
                                                     </Button>
                                                 </Link>
                                             </div>
@@ -275,7 +282,13 @@ const EditPost = () => {
                                                         alignItems: 'center',
                                                     }}
                                                 >
-                                                    <p>Kategorija: </p>
+                                                    <p>
+                                                        <FormattedMessage
+                                                            id="admin.posts.category"
+                                                            default="default text"
+                                                        />
+                                                        :{' '}
+                                                    </p>
                                                     <FormControl
                                                         className={
                                                             classes.formControl
@@ -305,7 +318,13 @@ const EditPost = () => {
                                                         alignItems: 'baseline',
                                                     }}
                                                 >
-                                                    <p>Tagovi: &nbsp;&nbsp;</p>
+                                                    <p>
+                                                        <FormattedMessage
+                                                            id="admin.posts.tags"
+                                                            default="default text"
+                                                        />
+                                                        : &nbsp;&nbsp;
+                                                    </p>
                                                     <FormControl
                                                         className={
                                                             classes.formControl
@@ -332,7 +351,11 @@ const EditPost = () => {
                                                     }}
                                                 >
                                                     <p>
-                                                        Komentari:{' '}
+                                                        <FormattedMessage
+                                                            id="admin.posts.comments"
+                                                            default="default text"
+                                                        />
+                                                        :{' '}
                                                         <span className="comment-field">
                                                             {numOfComm}
                                                         </span>
@@ -490,18 +513,26 @@ const EditPost = () => {
                                                         }}
                                                         component="span"
                                                     >
-                                                        Upload
+                                                        <FormattedMessage
+                                                            id="button.upload"
+                                                            default="default text"
+                                                        />
                                                     </Button>
                                                 </label>
                                                 <p>
-                                                    Preporucena velicina: 1280px
-                                                    x 720px
+                                                    <FormattedMessage
+                                                        id="image.size.recommendation"
+                                                        default="default text"
+                                                    />
                                                 </p>
                                             </div>
                                             <div className="right-buttons">
                                                 <Link to="/posts">
                                                     <ExitButton variant="outlined">
-                                                        Odustani
+                                                        <FormattedMessage
+                                                            id="admin.users.modal.cancel"
+                                                            default="default text"
+                                                        />
                                                     </ExitButton>
                                                 </Link>
                                                 <ButtonWrapper
@@ -515,7 +546,10 @@ const EditPost = () => {
                                                         boxShadow: 'none',
                                                     }}
                                                 >
-                                                    Sacuvaj
+                                                    <FormattedMessage
+                                                        id="button.save"
+                                                        default="default text"
+                                                    />
                                                 </ButtonWrapper>
                                             </div>
                                         </Right>
