@@ -79,6 +79,8 @@ Application has:
 
 ## Installation
 
+
+## Frontend
 Previously required the installation of NodeJS (v12.14.0 or newer).
 
 - Clone git repository
